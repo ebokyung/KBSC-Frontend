@@ -4,6 +4,7 @@ import { createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 const GlobalStyle = createGlobalStyle`
+@import url("//fonts.googleapis.com/earlyaccess/nanummyeongjo.css");
  html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
