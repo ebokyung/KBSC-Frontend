@@ -23,6 +23,7 @@ const NavDiv = styled.div`
 `
 
 const Logo = styled.div`
+    font-family: 'Nanum Myeongjo', serif;
     width: 10%;
     font-size: 23px;
 `
