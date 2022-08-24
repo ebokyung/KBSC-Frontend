@@ -14,14 +14,14 @@ const Wapper = styled.section`
 
 const Item = styled.div`
     &:first-child{
-        width: 270px;
+        width: 300px;
     }
     &:nth-child(2){
     }
     &:last-child{
         display: flex;
         flex-direction: column;
-        width: 270px;
+        width: 300px;
     }
 `
 
