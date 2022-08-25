@@ -24,7 +24,7 @@ const EmotionBox = styled.div`
     width: 100%;
     height: 600px;
     border: 5px solid ${props=>props.theme.emotionBoxBorderColor};
-    border-radius: 8px;
+    border-radius: 5px;
     background-color: ${props => props.theme.emotionBoxBackColor};
     padding-top: 2%;
     padding-left: 3%;
@@ -57,12 +57,13 @@ const ItemDate = styled.div`
     color : ${props => props.theme.emotionItemColor};
     font-size: 12px;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 `
 
 const ItemBody = styled.p`
-    line-height: 1.4;
+    line-height: 1.5;
     font-weight: 500;
+    font-size: 15px;
 `
 
 const boxVariants = {
@@ -134,6 +135,12 @@ const Input = styled.input`
     border: 1px solid #A2A2A6;
     border-radius: 3px;
     padding: 0 10px;
+    ::placeholder {
+        color: #A2A2A6;
+    }
+    :focus {
+        outline-color: ${props=>props.theme.SubmitBtnBackColor};
+    }
 `
 const Btn = styled.button`
     height: 40px;

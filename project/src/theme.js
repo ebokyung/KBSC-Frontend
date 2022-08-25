@@ -26,6 +26,8 @@ export const mainTheme ={
     toggleBtnBackColor : "#55BC98",
     toggleBtnBorderColor : "#98D4BF",
     SubmitBtnBackColor : "#55BC98",
+    BannerBackColor : "#55BC98",
+    itemFooterColor : "#F1A6A0",
 
 }
 
