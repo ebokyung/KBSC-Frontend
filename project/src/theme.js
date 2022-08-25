@@ -18,6 +18,15 @@ export const mainTheme ={
 
     // pageHead 색상
     underLineColor : "#FBE0D9",
+
+    // 감정 페이지 색상들
+    emotionBoxBackColor : "rgba(203, 233, 222, 0.2)",
+    emotionBoxBorderColor : "#CBE9DE",
+    emotionItemColor : "#55BC98",
+    toggleBtnBackColor : "#55BC98",
+    toggleBtnBorderColor : "#98D4BF",
+    SubmitBtnBackColor : "#55BC98",
+
 }
 
 // ${props => props.theme.~~};와 같은 방법으로 적용
