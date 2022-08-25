@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import PageHeader from "../components/PageHeader";
+import EmptyFence from '../components/emptyemotion/EmptyFence';
 
 const Container = styled.body`
     width: 100vw;
@@ -26,6 +27,7 @@ function EmptyEmotion() {
         <Container>
             <Wrapper>
                 <PageHeader props={pageheader} />
+                <EmptyFence />
             </Wrapper>
         </Container>
     );
