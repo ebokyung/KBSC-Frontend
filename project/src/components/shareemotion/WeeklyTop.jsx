@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useState } from 'react';
-import { heartBeat, virate } from "../animations";
 
 const Container = styled.section`
     width: 100%;
