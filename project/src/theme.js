@@ -35,6 +35,10 @@ export const mainTheme ={
     bookBoxGuideColor : "#55BC98",
     bookBoxTextColor : "gray",
 
+    // 미션 페이지 색상들 
+    lineColor : "#98D4BF",
+    
+
 }
 
 // ${props => props.theme.~~};와 같은 방법으로 적용
