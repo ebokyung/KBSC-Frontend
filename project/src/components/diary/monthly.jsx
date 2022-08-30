@@ -7,10 +7,18 @@ const Container = styled.section`
     margin-bottom: 10%;
     font-family: 'Nanum Myeongjo', serif;
     display:flex;
-
+    align-items: center;
 `
 
-// 책 모양 
+// 책 페이지 넘어가는 버튼
+const BtnPage = styled.div`
+    cursor: pointer;
+    font-size: 25px;
+    text-align: center;
+    color: ${props=>props.theme.bookBoxPageBtn};
+`
+
+// 책 모양
 const Book = styled.div`
     position: relative;
     width: 50%;
@@ -39,10 +47,23 @@ const Paper = styled.div`
     flex-direction: column;
 `
 
+// const flipEvent = (flipTo) => keyframes
+//     0% {
+//         transform-origin: ${flipTo};
+//         transform: rotateY(0);
+//     }
+//     100% {
+//         transform-origin: ${flipTo};
+//         transform: rotateY(180deg);
+//         animation-fill-mode: backwards;
+//     }
+// ` 
+
 const FlippedPaper = styled(Paper)`
-    ${props=> (props.isActive && `transform-origin: ${props.flipTo}; transform: rotateY(180deg); transition: transform 1s; z-index: 2;`)}
+    ${props=> (props.isActive && `transform-origin: ${props.flipTo}; transform: rotateY(180deg); transition: transform 1s;`)}
 `
 
+// 책 내용 공통
 const Header = styled.div`
     height: 13%;
     margin-bottom: 10px;
@@ -55,16 +76,6 @@ const ContentDiv = styled.div`
     display: flex;
     flex-direction: column;
 `
-
-// 책 페이지 넘어가는 버튼
-const BtnPage = styled.div`
-    position: absolute;
-    background-color: gray;
-    cursor: pointer;
-    z-index:2;
-`
-
-// 책 왼쪽 내부
 const Title = styled.div`
     font-size: 20px;
     font-weight: bold;
@@ -77,8 +88,6 @@ const StyledSpanB = styled.span`
 `
 
 const ScrollDiv = styled.div`
-    /* display: flex;
-    flex-direction:column; */
     overflow-y: scroll;
     height: 100%;
     /* direction: rtl;
@@ -94,10 +103,12 @@ const ScrollDiv = styled.div`
     }
 `
 
+// 책 왼쪽 내부
 const Item = styled.li`
     font-size: 12px;
     padding-bottom: 20px; 
     color: ${props=>props.color || props.theme.bookBoxTextColor};
+    cursor: pointer;
 `
 
 const ItemUnderLine = styled.span`
@@ -105,7 +116,15 @@ const ItemUnderLine = styled.span`
     box-shadow: inset 0 -6px 0 ${props => props.theme.underLineColor};
 `
 
-const Btn = styled.button`
+// 책 오른쪽 내부
+const EmptyGuideDiv = styled.div`
+    color: ${props=>props.theme.bookBoxGuideTextColor};
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    line-height: 2;
+`
+const UpdateBtn = styled.button`
     height: 25px;
     color:white;
     width: 90px;
@@ -117,14 +136,6 @@ const Btn = styled.button`
     margin-left: 20px;
 `
 
-// 책 오른쪽 내부
-const EmptyDiv = styled.div`
-    color: ${props=>props.theme.bookBoxGuideColor};
-    width: 100%;
-    margin: auto;
-    text-align: center;
-    line-height: 2;
-`
 const Question = styled.div`
     height: 15%;
     font-size: 15px;
@@ -145,6 +156,20 @@ const TextArea = styled.textarea`
     padding: 10px;
     margin-bottom: 30px;
     resize:none;
+    color: ${props=>props.theme.bookBoxTextColor};
+    font-family: 'Nanum Myeongjo', serif;
+    :focus {
+        outline-color: ${props=>props.theme.SubmitBtnBackColor};
+    }
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #9F9E9E;
+    }
+    ::-webkit-scrollbar-track {
+        background-color: #D9D9D9;
+    }
 `
 
 const test = [
@@ -242,22 +267,34 @@ function DiaryMonthly () {
     const [isNextBtnActive, setIsNextBtnActive] = useState(false);
     const [updateContent, setUpdateContent] = useState(false);
 
+    // 클릭된 질문 index 알아내기
     const handleSelect = (index) => {
         const newArr = Array(test.length).fill(false);
         newArr[index] = true;
         setIsClicked(newArr);
     };
 
+    // 수정버튼 클릭 시 모드변경 
     const handleUpdate = (i) => {
         console.log(i.content);
         setUpdateContent(prev=>!prev);
+        
+    }
+
+    // 다음 페이지 버튼 클릭 시 애니메이션 효과 & 페이지 내용 변화
+    const handlePrevBtn = () => {
+        setIsPrevBtnActive(prev => !prev);
+    }
+
+    const handleContentChange = (e) => {
+        // e.target.value;
     }
 
     return(
     <Container>
         {/* 책 왼쪽 */}
-       <Book shadow='-22px' align='flex-end' border='15px 10px 15px 20px'>
-            <BtnPage onClick={()=>setIsPrevBtnActive(prev => !prev)}>왼</BtnPage>
+        <BtnPage onClick={handlePrevBtn}>{'<'}</BtnPage>
+        <Book shadow='-22px' align='flex-end' border='15px 10px 15px 20px'>
             <FlippedPaper isActive={isPrevBtnActive} shadow='-22px' flipTo='102.8%'></FlippedPaper>
             <Paper shadow='-22px'>
                 <Header>
@@ -298,10 +335,10 @@ function DiaryMonthly () {
             <Paper shadow='22px'>
                 {
                     isClicked.every(el => el === false) ?
-                    <EmptyDiv>
+                    <EmptyGuideDiv>
                         왼쪽 페이지에서 <br />
                         답변을 보고 싶은 질문을 클릭해주세요.
-                    </EmptyDiv> 
+                    </EmptyGuideDiv> 
                     :
                     test.filter(i=> isClicked[i.num]).map(i =>
                         <div key={i.num} style={{height: '100%', width: '100%'}}>
@@ -310,9 +347,9 @@ function DiaryMonthly () {
                                     <StyledSpanB>08월</StyledSpanB>
                                     <span>{i.day}일</span>       
                                 </Title>
-                                <Btn onClick={()=>handleUpdate(i)}>
+                                <UpdateBtn onClick={()=>handleUpdate(i)}>
                                     { updateContent ? '완료' : '수정' }
-                                </Btn>
+                                </UpdateBtn>
                             </Header>
                             <ContentDiv>
                                 <Question>
@@ -321,11 +358,7 @@ function DiaryMonthly () {
                                 <Answer>
                                     {
                                         updateContent ? 
-                                        <ScrollDiv>
-                                            <TextArea>
-                                                {i.content}
-                                            </TextArea>
-                                        </ScrollDiv>
+                                        <TextArea value={i.content} onChange={()=>handleContentChange} />
                                         :
                                         <ScrollDiv>
                                             <pre style={{whiteSpace: 'pre-wrap'}}>
@@ -340,8 +373,8 @@ function DiaryMonthly () {
                     )
                 }
             </Paper>
-            <BtnPage onClick={()=>setIsNextBtnActive(prev => !prev)}>오</BtnPage>
         </Book>
+        <BtnPage onClick={()=>setIsNextBtnActive(prev => !prev)}>{'>'}</BtnPage>
     </Container>
     );
 }

@@ -30,9 +30,10 @@ export const mainTheme ={
     itemFooterColor : "#F1A6A0",
 
     // 질문일기 페이지 색상들
+    bookBoxPageBtn: "#55BC98",
     bookBoxBorderOutColor : "#98D4BF",
     bookBoxBorderInColor : "#CBE9DE",
-    bookBoxGuideColor : "#55BC98",
+    bookBoxGuideTextColor : "#55BC98",
     bookBoxTextColor : "gray",
 
     // 미션 페이지 색상들 
