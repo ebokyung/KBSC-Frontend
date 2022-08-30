@@ -29,6 +29,12 @@ export const mainTheme ={
     BannerBackColor : "#55BC98",
     itemFooterColor : "#F1A6A0",
 
+    // 질문일기 페이지 색상들
+    bookBoxBorderOutColor : "#98D4BF",
+    bookBoxBorderInColor : "#CBE9DE",
+    bookBoxGuideColor : "#55BC98",
+    bookBoxTextColor : "gray",
+
 }
 
 // ${props => props.theme.~~};와 같은 방법으로 적용
