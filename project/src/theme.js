@@ -29,6 +29,11 @@ export const mainTheme ={
     BannerBackColor : "#55BC98",
     itemFooterColor : "#F1A6A0",
 
+
+    // 미션 페이지 색상들 
+    lineColor : "#98D4BF",
+    
+
 }
 
 // ${props => props.theme.~~};와 같은 방법으로 적용

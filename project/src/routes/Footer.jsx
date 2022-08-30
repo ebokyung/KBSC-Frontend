@@ -1,12 +1,15 @@
 import styled from "styled-components";
+import logoImg from "../components/img/logo.png";
 
 const Wapper = styled.section`
     width: 100vw;
     height: 220px;
+    padding-left: 4%;
+    padding-right: 6%;
     background-color: ${props => props.theme.footerBackColor};
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: flex-end;
     padding-bottom: 55px;
     color : ${props => props.theme.footerColor};
@@ -25,6 +28,13 @@ const Item = styled.div`
     }
 `
 
+const Logo = styled.img`
+    width: 70px;
+    cursor: pointer;
+    height: 70px;
+    margin-left: 50px;
+`
+
 const Items = styled.div`
     width: 100%;
     display: flex;
@@ -41,9 +51,14 @@ const Name = styled.span`
 `
 
 function Footer() {
+    const gotoTop = () => {
+        window.scrollTo({top : 0 ,behavior : 'smooth'});
+    }
     return(
         <Wapper>
-            <Item></Item>
+            <Item>
+                <Logo onClick={gotoTop} src={logoImg} />
+            </Item>
             <Item>
                 ⓒ 2022 한울 All Rights Reserved
             </Item>
