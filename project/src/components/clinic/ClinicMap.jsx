@@ -120,7 +120,7 @@ const ItemTel = styled.div`
 
 // section 2
 const GuideDiv = styled.div`
-    font-size: 10px;
+    font-size: 11px;
     height: 30px;
     text-align: right;
     color: #A2A2A6;
@@ -201,10 +201,6 @@ function ClinicMap () {
                 <SearchForm>
                     <SearchBar placeholder="지역(읍/면/동) 을 입력해주세요." />
                     <SearchBtn><FontAwesomeIcon icon={faMagnifyingGlass} /></SearchBtn>
-                </SearchForm>
-                {/* version 2 : 드롭다운 */}
-                <SearchForm>
-
                 </SearchForm>
                 <ScrollDiv>
                     <ul>
