@@ -39,6 +39,9 @@ export const mainTheme ={
     // 미션 페이지 색상들 
     lineColor : "#98D4BF",
     
+    // 상담소 페이지 색상들
+    searchBarBorderColor: '#55BC98',
+    markerBackColor: '#55BC98',
 
 }
 

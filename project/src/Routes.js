@@ -7,7 +7,7 @@ import Mission from './routes/Mission';
 import ShareEmotion from './routes/ShareEmotion';
 import Footer from "./routes/Footer";
 import Chat from './routes/Chat';
-import Info from './routes/Info';
+import Clinic from './routes/Clinic';
 import LogoIn from './routes/LogIn';
 import SignUp from './routes/SignUp';
 
@@ -22,7 +22,7 @@ function Routers() {
                 <Route path="/diary" element={<Diary />} />
                 <Route path="/mission" element={<Mission />} />
                 <Route path="/chat" element={<Chat />} />
-                <Route path="/info" element={<Info />} />
+                <Route path="/clinic" element={<Clinic />} />
                 <Route path="/login" element={<LogoIn />} />
                 <Route path="/signup" element={<SignUp/>} />
             </Routes>
