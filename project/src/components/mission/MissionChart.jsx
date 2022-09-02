@@ -1,10 +1,13 @@
 import ApexChart from "react-apexcharts"
 import styled from "styled-components";
+import "./box.css";
  
 const Container = styled.section`
     margin-top: 20px;
     margin-bottom: 150px;
 `
+
+
 
 function MissionChart () {
     return (
@@ -80,11 +83,34 @@ function MissionChart () {
             },
             tooltip: {              // 마우스를 갔다대면 나오는 정보창
                 y: {
-                    formatter: (value) => `$ ${value.toFixed(2)}`       // 값을 넘겨주는 함수
+                    formatter: function(value) {
+                        return value === 100 ? `완벽해요! : ${value}% 완료`: 
+                        // 75 ~ 100
+                        value >= 75 ? `거의 다 왔어요! : ${value}% 완료` :
+                        // 50 ~ 75
+                        value >= 50 ? `수고했어요! : ${value}% 완료` :
+                        // 1 ~ 50
+                        value >= 1 ? `조금만 힘을 내봐요! : ${value}% 완료` :
+                        // 0
+                        `오늘은 쉬어가는 날! : ${value}% 완료`
+                      }     // 값을 넘겨주는 함수
                 },
                 x: {
                     show: false
                 },
+                // custom: function (series) { 
+                //     return (
+                //         '<div class="custom_box">' +
+                //         '<span class="custom_box_title">' +
+                //         series.series[0][series.dataPointIndex] + "% " + "완료!" +
+                //         "</span>" +
+                //         '<span class="custom_box_body">' +
+                //         '완벽해요!' +
+                //         "</span>" +
+                //         "</div>"
+                //       );
+                // },
+
                 
             },
             stroke: {               // line 스타일 설정
@@ -98,3 +124,5 @@ function MissionChart () {
     )
 }
 export default MissionChart;
+
+// locatstorage로 색 처리
