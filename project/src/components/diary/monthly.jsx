@@ -1,5 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
+import HTMLFlipBook from 'react-pageflip';
+import { useCallback, forwardRef, useRef } from "react";
+import { useEffect } from "react";
 
 const Container = styled.section`
     width: 100%;
@@ -259,123 +262,177 @@ const test = [
     },
 ]
 
-
-function DiaryMonthly () {
-    
-    const [isClicked, setIsClicked] = useState([false, false]);
-    const [isPrevBtnActive, setIsPrevBtnActive] = useState(false);
-    const [isNextBtnActive, setIsNextBtnActive] = useState(false);
-    const [updateContent, setUpdateContent] = useState(false);
-
-    // 클릭된 질문 index 알아내기
-    const handleSelect = (index) => {
-        const newArr = Array(test.length).fill(false);
-        newArr[index] = true;
-        setIsClicked(newArr);
-    };
-
-    // 수정버튼 클릭 시 모드변경 
-    const handleUpdate = (i) => {
-        console.log(i.content);
-        setUpdateContent(prev=>!prev);
-        
-    }
-
-    // 다음 페이지 버튼 클릭 시 애니메이션 효과 & 페이지 내용 변화
-    const handlePrevBtn = () => {
-        setIsPrevBtnActive(prev => !prev);
-    }
-
-    const handleContentChange = (e) => {
-        // e.target.value;
-    }
-
-    return(
-    <Container>
-        {/* 책 왼쪽 */}
-        <BtnPage onClick={handlePrevBtn}>{'<'}</BtnPage>
-        <Book shadow='-22px' align='flex-end' border='15px 10px 15px 20px'>
-            <FlippedPaper isActive={isPrevBtnActive} shadow='-22px' flipTo='102.8%'></FlippedPaper>
-            <Paper shadow='-22px'>
-                <Header>
-                    <Title>
-                        <StyledSpanA>2022년</StyledSpanA>
-                        <StyledSpanA>08월</StyledSpanA>
-                    </Title>
-                </Header>
-                <ContentDiv>
-                    <ScrollDiv>
-                        <ul>
-                        {test.map(i =>
-                            <Item key={i.num} 
-                                isClicked={isClicked} 
-                                onClick={()=>handleSelect(i.num)} 
-                                color={isClicked[i.num] ? 'black' : ''}>
-                                {
-                                    isClicked[i.num] ? 
-                                    <ItemUnderLine>
-                                        <StyledSpanB>{i.day}일</StyledSpanB>
-                                        <span>{i.question}</span>
-                                    </ItemUnderLine> :
-                                    <span>
-                                        <StyledSpanB>{i.day}일</StyledSpanB>
-                                        <span>{i.question}</span>
-                                    </span>
-                                }
-                            </Item>
-                        )}
-                        </ul>
-                    </ScrollDiv>
-                </ContentDiv> 
-            </Paper>
+const Page = forwardRef((props, ref) => {
+    return (
+        <Book ref={ref}>
+            <h1>Page Header</h1>
+            <p>{props.children}</p>
+            <p>Page number: {props.number}</p>
         </Book>
-        {/* 책 오른쪽*/}
-        <Book shadow='22px' align='flex-start' border='15px 20px 15px 10px'>
-            <FlippedPaper isActive={isNextBtnActive} shadow='22px' flipTo='-2.8% 0'></FlippedPaper>
-            <Paper shadow='22px'>
-                {
-                    isClicked.every(el => el === false) ?
-                    <EmptyGuideDiv>
-                        왼쪽 페이지에서 <br />
-                        답변을 보고 싶은 질문을 클릭해주세요.
-                    </EmptyGuideDiv> 
-                    :
-                    test.filter(i=> isClicked[i.num]).map(i =>
-                        <div key={i.num} style={{height: '100%', width: '100%'}}>
-                            <Header>
-                                <Title>
-                                    <StyledSpanB>08월</StyledSpanB>
-                                    <span>{i.day}일</span>       
-                                </Title>
-                                <UpdateBtn onClick={()=>handleUpdate(i)}>
-                                    { updateContent ? '완료' : '수정' }
-                                </UpdateBtn>
-                            </Header>
-                            <ContentDiv>
-                                <Question>
-                                    <ItemUnderLine>{i.question}</ItemUnderLine>
-                                </Question>
-                                <Answer>
-                                    {
-                                        updateContent ? 
-                                        <TextArea value={i.content} onChange={()=>handleContentChange} />
-                                        :
-                                        <ScrollDiv>
-                                            <pre style={{whiteSpace: 'pre-wrap'}}>
-                                                {i.content}
-                                            </pre>
-                                        </ScrollDiv>
-                                    }
-                                    
-                                </Answer>
-                            </ContentDiv>
-                        </div> 
-                    )
-                }
-            </Paper>
-        </Book>
-        <BtnPage onClick={()=>setIsNextBtnActive(prev => !prev)}>{'>'}</BtnPage>
-    </Container>
     );
+});
+
+
+function DiaryMonthly (props) {
+    const [page,setPage] = useState(0);
+    const [totalPage,setTotalPage] = useState(0);
+    const flipBookRef = useRef([page, totalPage]);
+
+    const onFlip = useCallback((e) => {
+        console.log('Current page: ' + e.data);
+        console.log('Total page: ' + totalPage);
+        setPage(e.data);
+    }, []);
+
+    useEffect(()=>{
+        console.log('total page: ' + totalPage);
+        console.log(flipBookRef.current);
+        // setTotalPage(flipBookRef.current.pageFlip().getPageCount());
+    }, [totalPage]);
+
+    const handlePrevBtn = () =>{
+        flipBookRef.current.pageFlip().flipPrev();
+    }
+
+    const handleNextBtn = () =>{
+        flipBookRef.current.pageFlip().flipNext();
+    }
+
+    return (
+        <div>
+            <BtnPage onClick={handlePrevBtn}>{'<'}</BtnPage>
+            <HTMLFlipBook 
+                width={300} 
+                height={500} 
+                onFlip={onFlip}
+                // onChangeState={onChangeState}
+                ref={flipBookRef}>
+                <Page number="1">Page text</Page>
+                <Page number="2">Page text2</Page>
+                <Page number="3">Page text3</Page>
+                <Page number="4">Page text4</Page>
+            </HTMLFlipBook>
+            <BtnPage onClick={handleNextBtn}>{'>'}</BtnPage>
+        </div>
+        
+
+    );
+
+    // const [isClicked, setIsClicked] = useState([false, false]);
+    // const [isPrevBtnActive, setIsPrevBtnActive] = useState(false);
+    // const [isNextBtnActive, setIsNextBtnActive] = useState(false);
+    // const [updateContent, setUpdateContent] = useState(false);
+
+    // // 클릭된 질문 index 알아내기
+    // const handleSelect = (index) => {
+    //     const newArr = Array(test.length).fill(false);
+    //     newArr[index] = true;
+    //     setIsClicked(newArr);
+    // };
+
+    // // 수정버튼 클릭 시 모드변경 
+    // const handleUpdate = (i) => {
+    //     console.log(i.content);
+    //     setUpdateContent(prev=>!prev);
+        
+    // }
+
+    // // 다음 페이지 버튼 클릭 시 애니메이션 효과 & 페이지 내용 변화
+    // const handlePrevBtn = () => {
+    //     setIsPrevBtnActive(prev => !prev);
+    // }
+
+    // const handleContentChange = (e) => {
+    //     // e.target.value;
+    // }
+
+    // return(
+
+    // <Container>
+    //     {/* 책 왼쪽 */}
+    //     <BtnPage onClick={handlePrevBtn}>{'<'}</BtnPage>
+    //     <Book shadow='-22px' align='flex-end' border='15px 10px 15px 20px'>
+    //         <FlippedPaper isActive={isPrevBtnActive} shadow='-22px' flipTo='102.8%'></FlippedPaper>
+    //         <Paper shadow='-22px'>
+    //             <Header>
+    //                 <Title>
+    //                     <StyledSpanA>2022년</StyledSpanA>
+    //                     <StyledSpanA>08월</StyledSpanA>
+    //                 </Title>
+    //             </Header>
+    //             <ContentDiv>
+    //                 <ScrollDiv>
+    //                     <ul>
+    //                     {test.map(i =>
+    //                         <Item key={i.num} 
+    //                             isClicked={isClicked} 
+    //                             onClick={()=>handleSelect(i.num)} 
+    //                             color={isClicked[i.num] ? 'black' : ''}>
+    //                             {
+    //                                 isClicked[i.num] ? 
+    //                                 <ItemUnderLine>
+    //                                     <StyledSpanB>{i.day}일</StyledSpanB>
+    //                                     <span>{i.question}</span>
+    //                                 </ItemUnderLine> :
+    //                                 <span>
+    //                                     <StyledSpanB>{i.day}일</StyledSpanB>
+    //                                     <span>{i.question}</span>
+    //                                 </span>
+    //                             }
+    //                         </Item>
+    //                     )}
+    //                     </ul>
+    //                 </ScrollDiv>
+    //             </ContentDiv> 
+    //         </Paper>
+    //     </Book>
+    //     {/* 책 오른쪽*/}
+    //     <Book shadow='22px' align='flex-start' border='15px 20px 15px 10px'>
+    //         <FlippedPaper isActive={isNextBtnActive} shadow='22px' flipTo='-2.8% 0'></FlippedPaper>
+    //         <Paper shadow='22px'>
+    //             {
+    //                 isClicked.every(el => el === false) ?
+    //                 <EmptyGuideDiv>
+    //                     왼쪽 페이지에서 <br />
+    //                     답변을 보고 싶은 질문을 클릭해주세요.
+    //                 </EmptyGuideDiv> 
+    //                 :
+    //                 test.filter(i=> isClicked[i.num]).map(i =>
+    //                     <div key={i.num} style={{height: '100%', width: '100%'}}>
+    //                         <Header>
+    //                             <Title>
+    //                                 <StyledSpanB>08월</StyledSpanB>
+    //                                 <span>{i.day}일</span>       
+    //                             </Title>
+    //                             <UpdateBtn onClick={()=>handleUpdate(i)}>
+    //                                 { updateContent ? '완료' : '수정' }
+    //                             </UpdateBtn>
+    //                         </Header>
+    //                         <ContentDiv>
+    //                             <Question>
+    //                                 <ItemUnderLine>{i.question}</ItemUnderLine>
+    //                             </Question>
+    //                             <Answer>
+    //                                 {
+    //                                     updateContent ? 
+    //                                     <TextArea value={i.content} onChange={()=>handleContentChange} />
+    //                                     :
+    //                                     <ScrollDiv>
+    //                                         <pre style={{whiteSpace: 'pre-wrap'}}>
+    //                                             {i.content}
+    //                                         </pre>
+    //                                     </ScrollDiv>
+    //                                 }
+                                    
+    //                             </Answer>
+    //                         </ContentDiv>
+    //                     </div> 
+    //                 )
+    //             }
+    //         </Paper>
+    //     </Book>
+    //     <BtnPage onClick={()=>setIsNextBtnActive(prev => !prev)}>{'>'}</BtnPage>
+    // </Container>
+    // );
 }
 export default DiaryMonthly;
