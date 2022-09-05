@@ -46,26 +46,46 @@ const Paper = styled.div`
     ${props=> (props.align === 'left' ? 'right:0;' : 'left:0;' )}
     width: 96%;
     height: 95%;
-    overflow-y: hidden;
     background-color: white;
     border-radius: 10px;
     box-shadow: rgba(215, 215, 215, 0.80) ${props=> (props.align === 'left' ? '-15px' : '15px')} 0px 20px 0px inset;
-    ${props=> (props.align === 'left' ? 'padding: 20px 40px 20px 30px;' : 'padding: 20px 30px 20px 40px;' )}
     display: flex;
     flex-direction: column;
-    ${props=> (props.isActive && css`animation: ${flipEvent(props.flipTo)} 0.8s;`)};
+    overflow-y: hidden;
+`
+
+const EmptyPaper = styled(Paper)`
+    ${props=> (props.align === 'left' ? 'padding: 20px 40px 20px 30px;' : 'padding: 20px 30px 20px 40px;' )}
+`
+
+const Card = styled(Paper)`
+    perspective: 1800px;
+    ${props=> (props.isActive && css`animation: ${flipEvent(props.flipTo)} 3s;`)}
+`
+const CardBox = styled(Card)`
+    width: 100%;
+    height: 100%;
+    position: relative;
+    backface-visibility: hidden;
+    background-color: gray;
+`
+
+const CardPaper = styled(CardBox)`
+    position: absolute;
+    background-color: white;
+    ${props=> (props.align === 'left' ? 'padding: 20px 40px 20px 30px;' : 'padding: 20px 30px 20px 40px;' )}
 `
 
 const flipEvent = (flipTo) => keyframes`
     0% {
         transform-origin: ${flipTo};
         transform: rotateY(0);
-        z-index:2;
+        z-index: 2;
     }
     100% {
         transform-origin: ${flipTo};
         transform: rotateY(180deg);
-        z-index:2;
+        z-index: 2;
     }
 `
 
@@ -272,6 +292,9 @@ function DiaryMonthly () {
     const [isPrevBtnActive, setIsPrevBtnActive] = useState(false);
     const [isNextBtnActive, setIsNextBtnActive] = useState(false);
     const [updateContent, setUpdateContent] = useState(false);
+    // const [zIndex, setZIndex] = useState({
+    //     type: 'password',
+    // });
 
     // 클릭된 질문 index 알아내기
     const handleSelect = (index) => {
@@ -293,7 +316,6 @@ function DiaryMonthly () {
     // 이전 페이지 버튼 클릭 시 애니메이션 효과 & 페이지 내용 변화
     const handlePrevBtn = () => {
         setIsPrevBtnActive(prev => !prev);
-        // 
     }
     // 다음 페이지 버튼 클릭 시 애니메이션 효과 & 페이지 내용 변화
     const handleNextBtn = () => {
@@ -308,91 +330,106 @@ function DiaryMonthly () {
         <BtnPage onClick={handlePrevBtn}>{'<'}</BtnPage>
         <BookOuter>
             <BookInner align='left'>
-                <Paper align='left'></Paper>
-                <Paper align='left' isActive={isPrevBtnActive} flipTo='right' onAnimationEnd={()=>(setIsPrevBtnActive(prev => !prev), setIsClicked([false,false]))}>
-                    <Header>
-                        <Title>
-                            <StyledSpanA>2022년</StyledSpanA>
-                            <StyledSpanA>08월</StyledSpanA>
-                        </Title>
-                    </Header>
-                    <ContentDiv>
-                        <ScrollDiv>
-                            <ul>
-                            {test.map(i =>
-                                <Item key={i.num} 
-                                    isClicked={isClicked} 
-                                    onClick={()=>handleSelect(i.num)} 
-                                    color={isClicked[i.num] ? 'black' : ''}>
-                                    {
-                                        isClicked[i.num] ? 
-                                        <ItemUnderLine>
-                                            <StyledSpanB>{i.day}일</StyledSpanB>
-                                            <span>{i.question}</span>
-                                        </ItemUnderLine> :
-                                        <span>
-                                            <StyledSpanB>{i.day}일</StyledSpanB>
-                                            <span>{i.question}</span>
-                                        </span>
-                                    }
-                                </Item>
-                            )}
-                            </ul>
-                        </ScrollDiv>
-                    </ContentDiv> 
-                </Paper>
+                <EmptyPaper align='left'>
+                        <Header>
+                            <Title>
+                                <StyledSpanA>2022년</StyledSpanA>
+                                <StyledSpanA>07월</StyledSpanA>
+                            </Title>
+                        </Header>
+                </EmptyPaper>
+                <Card align='left' isActive={isPrevBtnActive} flipTo='right' onAnimationEnd={()=>(setIsPrevBtnActive(prev => !prev), setIsClicked([false,false]))}>
+                    <CardBox align='left'>
+                        <CardPaper align='left'>
+                            <Header>
+                                <Title>
+                                    <StyledSpanA>2022년</StyledSpanA>
+                                    <StyledSpanA>08월</StyledSpanA>
+                                </Title>
+                            </Header>
+                            <ContentDiv>
+                                <ScrollDiv>
+                                    <ul>
+                                    {test.map(i =>
+                                        <Item key={i.num} 
+                                            isClicked={isClicked} 
+                                            onClick={()=>handleSelect(i.num)} 
+                                            color={isClicked[i.num] ? 'black' : ''}>
+                                            {
+                                                isClicked[i.num] ? 
+                                                <ItemUnderLine>
+                                                    <StyledSpanB>{i.day}일</StyledSpanB>
+                                                    <span>{i.question}</span>
+                                                </ItemUnderLine> :
+                                                <span>
+                                                    <StyledSpanB>{i.day}일</StyledSpanB>
+                                                    <span>{i.question}</span>
+                                                </span>
+                                            }
+                                        </Item>
+                                    )}
+                                    </ul>
+                                </ScrollDiv>
+                            </ContentDiv> 
+                        </CardPaper>
+                    </CardBox>
+                </Card>
             </BookInner>
         </BookOuter>
         {/* 책 오른쪽*/}
         <BookOuter>
             <BookInner align='right'>
-                <Paper align='right'>
+                <EmptyPaper align='right'>
                     <EmptyGuideDiv>
                         왼쪽 페이지에서 <br />
                         답변을 보고 싶은 질문을 클릭해주세요.
                     </EmptyGuideDiv> 
-                </Paper>
-                <Paper align='right' isActive={isNextBtnActive}  flipTo='left' onAnimationEnd={()=>(setIsNextBtnActive(prev => !prev), setIsClicked([false,false]))}>
-                    {
-                        isClicked.every(el => el === false) ?
-                        <EmptyGuideDiv>
-                            왼쪽 페이지에서 <br />
-                            답변을 보고 싶은 질문을 클릭해주세요.
-                        </EmptyGuideDiv> 
-                        :
-                        test.filter(i=> isClicked[i.num]).map(i =>
-                            <div key={i.num} style={{height: '100%', width: '100%'}}>
-                                <Header>
-                                    <Title>
-                                        <StyledSpanB>08월</StyledSpanB>
-                                        <span>{i.day}일</span>       
-                                    </Title>
-                                    <UpdateBtn onClick={()=>handleUpdate(i)}>
-                                        { updateContent ? '완료' : '수정' }
-                                    </UpdateBtn>
-                                </Header>
-                                <ContentDiv>
-                                    <Question>
-                                        <ItemUnderLine>{i.question}</ItemUnderLine>
-                                    </Question>
-                                    <Answer>
-                                        {
-                                            updateContent ? 
-                                            <TextArea value={i.content} onChange={()=>handleContentChange} />
-                                            :
-                                            <ScrollDiv>
-                                                <pre style={{whiteSpace: 'pre-wrap', paddingRight: '10px'}}>
-                                                    {i.content}
-                                                </pre>
-                                            </ScrollDiv>
-                                        }
-                                        
-                                    </Answer>
-                                </ContentDiv>
-                            </div> 
-                        )
-                    }
-                </Paper>
+                </EmptyPaper>
+                <Card align='right' isActive={isNextBtnActive}  flipTo='left' onAnimationEnd={()=>(setIsNextBtnActive(prev => !prev), setIsClicked([false,false]))}>
+                    <CardBox>
+                        <CardPaper>
+                        {
+                            isClicked.every(el => el === false) ?
+                            <EmptyGuideDiv>
+                                왼쪽 페이지에서 <br />
+                                답변을 보고 싶은 질문을 클릭해주세요.
+                            </EmptyGuideDiv> 
+                            :
+                            test.filter(i=> isClicked[i.num]).map(i =>
+                                <div key={i.num} style={{height: '100%', width: '100%'}}>
+                                    <Header>
+                                        <Title>
+                                            <StyledSpanB>08월</StyledSpanB>
+                                            <span>{i.day}일</span>       
+                                        </Title>
+                                        <UpdateBtn onClick={()=>handleUpdate(i)}>
+                                            { updateContent ? '완료' : '수정' }
+                                        </UpdateBtn>
+                                    </Header>
+                                    <ContentDiv>
+                                        <Question>
+                                            <ItemUnderLine>{i.question}</ItemUnderLine>
+                                        </Question>
+                                        <Answer>
+                                            {
+                                                updateContent ? 
+                                                <TextArea value={i.content} onChange={()=>handleContentChange} />
+                                                :
+                                                <ScrollDiv>
+                                                    <pre style={{whiteSpace: 'pre-wrap', paddingRight: '10px'}}>
+                                                        {i.content}
+                                                    </pre>
+                                                </ScrollDiv>
+                                            }
+                                            
+                                        </Answer>
+                                    </ContentDiv>
+                                </div> 
+                            )
+                        }
+                    </CardPaper>
+                    </CardBox>
+                </Card>
             </BookInner>
         </BookOuter>
         <BtnPage onClick={handleNextBtn}>{'>'}</BtnPage>
