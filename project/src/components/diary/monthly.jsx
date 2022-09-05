@@ -305,6 +305,11 @@ function DiaryMonthly () {
 
     // 수정버튼 클릭 시 모드변경 
     const handleUpdate = (i) => {
+        if(updateContent){
+            // api로 서버에 새로운 내용 변경 사항 보내기 (put요청)
+        }else{
+            // 수정하기로 넘어가면서 api를 통해서 해당 게시글 내용 받아오기 (get요청)
+        }
         console.log(i.content);
         setUpdateContent(prev=>!prev);
     }
