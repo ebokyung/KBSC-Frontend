@@ -1,12 +1,18 @@
 import styled from "styled-components";
 import logoImg from "../components/img/logo.png";
 
-const Wapper = styled.section`
+const Container = styled.body`
     width: 100vw;
-    height: 220px;
-    padding-left: 4%;
-    padding-right: 6%;
+    display: flex;
+    justify-content: center;
     background-color: ${props => props.theme.footerBackColor};
+    height: 220px;
+`
+
+const Wrapper = styled.section`
+    width : ${props => props.theme.width};
+    max-width: ${props => props.theme.maxWidth};
+    height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     display: flex;
     justify-content: space-between;
@@ -18,6 +24,7 @@ const Wapper = styled.section`
 const Item = styled.div`
     &:first-child{
         width: 300px;
+        margin-left: 20px;
     }
     &:nth-child(2){
     }
@@ -29,10 +36,9 @@ const Item = styled.div`
 `
 
 const Logo = styled.img`
-    width: 70px;
+    width: 80px;
     cursor: pointer;
-    height: 70px;
-    margin-left: 50px;
+    height: 80px;
 `
 
 const Items = styled.div`
@@ -55,7 +61,8 @@ function Footer() {
         window.scrollTo({top : 0 ,behavior : 'smooth'});
     }
     return(
-        <Wapper>
+        <Container>
+            <Wrapper>
             <Item>
                 <Logo onClick={gotoTop} src={logoImg} />
             </Item>
@@ -88,7 +95,8 @@ function Footer() {
                     </Name>
                 </Items>
             </Item>
-        </Wapper>
+        </Wrapper>
+        </Container>
     )
 }
 

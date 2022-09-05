@@ -3,6 +3,7 @@ export const mainTheme ={
     navBackColor : "#98D4BF",  // 네브바 배경색
     navColor1 : "#CBE9DE",   // 네브바 해당 페이지 아닌 색상
     navColor2 : "#FFFFFF",   // 네브바 해당 페이지
+    navmarginTop : "70px",
 
 
     // Footer(하단 설명이름) 색상
@@ -13,7 +14,7 @@ export const mainTheme ={
     // 화면 비율
     width : "86%",
     maxWidth:"1600px", 
-    minHeight:"100vh",
+    minHeight:"90vh",
 
 
     // pageHead 색상
@@ -38,10 +39,15 @@ export const mainTheme ={
 
     // 미션 페이지 색상들 
     lineColor : "#98D4BF",
+    btnColor : "#55BC98",
     
     // 상담소 페이지 색상들
     searchBarBorderColor: '#55BC98',
     markerBackColor: '#55BC98',
+
+
+    // 로그인, 회원가입 페이지
+    logBtnBackColor : "#55BC98",
 
 }
 

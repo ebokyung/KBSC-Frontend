@@ -8,6 +8,7 @@ const Container = styled.body`
     display: flex;
     justify-content: center;
     flex-direction: column;
+    margin-top: ${props => props.theme.navmarginTop};
 `
 
 const Wrapper = styled.section`
