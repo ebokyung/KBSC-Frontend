@@ -13,7 +13,7 @@ export const mainTheme ={
     // 화면 비율
     width : "86%",
     maxWidth:"1600px", 
-    minHeight:"100vh",
+    minHeight:"90vh",
 
 
     // pageHead 색상
@@ -38,10 +38,15 @@ export const mainTheme ={
 
     // 미션 페이지 색상들 
     lineColor : "#98D4BF",
+    btnColor : "#55BC98",
     
     // 상담소 페이지 색상들
     searchBarBorderColor: '#55BC98',
     markerBackColor: '#55BC98',
+
+
+    // 로그인, 회원가입 페이지
+    logBtnBackColor : "#55BC98",
 
 }
 
