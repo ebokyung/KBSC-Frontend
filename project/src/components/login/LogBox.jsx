@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API } from '../../axios';
 
 const Container = styled.section`
     width: 75%;
@@ -156,8 +157,25 @@ function LogBox () {
         })
     }
 
-    const onValid = (data) => {
-        console.log(data)
+    const onValid = async(data) => {
+        const result = {
+            "username": data.id,
+            "password": data.pw,
+        };
+        try{
+            await API.post('/api/v1/user/login', result).then(
+                response => {
+                    if(autolog){
+                        localStorage.setItem("token", response.data);
+                    }else{
+                        sessionStorage.setItem("token", response.data)
+                    }
+                }
+            )
+            navigate("/")
+        } catch(error){
+            console.log(error)
+        }
     }
 
     return(

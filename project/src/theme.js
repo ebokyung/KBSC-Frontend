@@ -3,6 +3,7 @@ export const mainTheme ={
     navBackColor : "#98D4BF",  // 네브바 배경색
     navColor1 : "#CBE9DE",   // 네브바 해당 페이지 아닌 색상
     navColor2 : "#FFFFFF",   // 네브바 해당 페이지
+    navmarginTop : "70px",
 
 
     // Footer(하단 설명이름) 색상

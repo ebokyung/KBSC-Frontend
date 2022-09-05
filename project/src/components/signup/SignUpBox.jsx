@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API } from '../../axios';
 
 const Container = styled.section`
     width: 75%;
@@ -135,7 +136,7 @@ function SignUpBox () {
         })
     }
 
-    const onValid = (data) => {
+    const onValid = async(data) => {
         var regExp = /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?=[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,}$/;
         if (data.pw !== data.pw2){
             window.alert("비밀번호가 서로 다릅니다.")
@@ -146,7 +147,21 @@ function SignUpBox () {
             window.alert("영문, 숫자, 특수문자 중 2가지 이상 조합하여 8자리")
             return
         }
-        console.log(data)
+        const result = {
+            username: data.id,
+            nickname : data.nickname,
+            password: data.pw1,
+        };
+        try{
+            await API.post('/api/v1/user/sign-up', result).then(
+                response => {
+                    console.log(response);
+                }
+            )
+            navigate("/login");
+        } catch(error){
+            console.log(error)
+        }
     }
 
     return(
