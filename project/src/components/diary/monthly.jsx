@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 const Container = styled.section`
     width: 100%;
@@ -53,23 +53,20 @@ const Paper = styled.div`
     ${props=> (props.align === 'left' ? 'padding: 20px 40px 20px 30px;' : 'padding: 20px 30px 20px 40px;' )}
     display: flex;
     flex-direction: column;
+    ${props=> (props.isActive && css`animation: ${flipEvent(props.flipTo)} 0.8s;`)};
 `
 
-// const flipEvent = (flipTo) => keyframes
-//     0% {
-//         transform-origin: ${flipTo};
-//         transform: rotateY(0);
-//     }
-//     100% {
-//         transform-origin: ${flipTo};
-//         transform: rotateY(180deg);
-//         animation-fill-mode: backwards;
-//     }
-// ` 
-
-const FlippedPaper = styled(Paper)`
-    /* ${props=> (props.isActive && `transform-origin: ${props.flipTo}; transform: rotateY(180deg); transition: transform 1s;`)} */
-    
+const flipEvent = (flipTo) => keyframes`
+    0% {
+        transform-origin: ${flipTo};
+        transform: rotateY(0);
+        z-index:2;
+    }
+    100% {
+        transform-origin: ${flipTo};
+        transform: rotateY(180deg);
+        z-index:2;
+    }
 `
 
 // 책 내용 공통
@@ -269,7 +266,6 @@ const test = [
     },
 ]
 
-
 function DiaryMonthly () {
     
     const [isClicked, setIsClicked] = useState([false, false]);
@@ -289,25 +285,31 @@ function DiaryMonthly () {
         console.log(i.content);
         setUpdateContent(prev=>!prev);
     }
-
-    // 다음 페이지 버튼 클릭 시 애니메이션 효과 & 페이지 내용 변화
-    // const handlePrevBtn = () => {
-    //     setIsPrevBtnActive(prev => !prev);
-
-    // }
-
+    // 일기 수정된 내용 반영
     const handleContentChange = (e) => {
         // e.target.value;
+    }
+
+    // 이전 페이지 버튼 클릭 시 애니메이션 효과 & 페이지 내용 변화
+    const handlePrevBtn = () => {
+        setIsPrevBtnActive(prev => !prev);
+        // 
+    }
+    // 다음 페이지 버튼 클릭 시 애니메이션 효과 & 페이지 내용 변화
+    const handleNextBtn = () => {
+        setIsNextBtnActive(prev => !prev);
+        // setIsClicked([false,false]);
+        //
     }
 
     return(
     <Container>
         {/* 책 왼쪽 */}
-        <BtnPage onClick={()=>setIsPrevBtnActive(prev => !prev)}>{'<'}</BtnPage>
+        <BtnPage onClick={handlePrevBtn}>{'<'}</BtnPage>
         <BookOuter>
             <BookInner align='left'>
-                <FlippedPaper isActive={isPrevBtnActive} align='left' flipTo='right'></FlippedPaper>
-                <Paper align='left'>
+                <Paper align='left'></Paper>
+                <Paper align='left' isActive={isPrevBtnActive} flipTo='right' onAnimationEnd={()=>(setIsPrevBtnActive(prev => !prev), setIsClicked([false,false]))}>
                     <Header>
                         <Title>
                             <StyledSpanA>2022년</StyledSpanA>
@@ -344,8 +346,13 @@ function DiaryMonthly () {
         {/* 책 오른쪽*/}
         <BookOuter>
             <BookInner align='right'>
-                <FlippedPaper isActive={isNextBtnActive} align='right' flipTo='left'></FlippedPaper>
                 <Paper align='right'>
+                    <EmptyGuideDiv>
+                        왼쪽 페이지에서 <br />
+                        답변을 보고 싶은 질문을 클릭해주세요.
+                    </EmptyGuideDiv> 
+                </Paper>
+                <Paper align='right' isActive={isNextBtnActive}  flipTo='left' onAnimationEnd={()=>(setIsNextBtnActive(prev => !prev), setIsClicked([false,false]))}>
                     {
                         isClicked.every(el => el === false) ?
                         <EmptyGuideDiv>
@@ -388,7 +395,7 @@ function DiaryMonthly () {
                 </Paper>
             </BookInner>
         </BookOuter>
-        <BtnPage onClick={()=>setIsNextBtnActive(prev => !prev)}>{'>'}</BtnPage>
+        <BtnPage onClick={handleNextBtn}>{'>'}</BtnPage>
     </Container>
     );
 }
