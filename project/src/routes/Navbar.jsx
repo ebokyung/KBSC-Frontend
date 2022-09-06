@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import $ from 'jquery';
@@ -64,6 +64,9 @@ const Menu = styled.div`
 `
 
 const Item = styled.div`
+    height: 60%;
+    display: flex;
+    align-items: center;
     opacity: ${props => props.isActive ? 1 : 0.6};
     cursor: pointer;
     float:center;
@@ -74,6 +77,7 @@ const Item = styled.div`
         transition: all 0.4s;
         opacity: 1;
     }
+    ${props => (props.itemName === '감정비우기' && css`:hover ul{ display: block; }`)}; //호버시 드롭다운 보이기
 `
 
 const Alarm = styled.div`
@@ -86,16 +90,15 @@ const Alarm = styled.div`
     border-radius: 15px;
 `
 const DropDown = styled.ul`
-    display: ${props => props.isActive ? 'block' : 'none'};
+    display: none;
     position: absolute;
-    top: 16px;
+    top: 30px;
     left:20px;
     background-color: #ffffff;
     width: 110px;
     margin-top: 16px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
-    /* z-index: 1; */
     color: ${props => props.theme.navBackColor};
     text-align: center;
 `
@@ -110,8 +113,6 @@ const DropDownList = styled.li`
 `
 
 function NavBar () {
-    // 메뉴 클릭하면 드롭다운 되도록 하는 상태변수
-    const [isActive, setIsActive] = useState(false);
     const navigate = useNavigate()
     const emotionMatch = useMatch("/emotion/*")
     const emptyMatch = useMatch("/emotion/empty");
@@ -156,8 +157,8 @@ function NavBar () {
             </Logo>
             <Menu>
                 <Item isActive={mainMatch !== null} onClick={() => navigate("/")}>서비스 소개</Item>
-                <Item isActive={emotionMatch  !== null}  onClick={()=>{setIsActive(!isActive)}}>감정 비우기
-                    <DropDown isActive={isActive}>
+                <Item isActive={emotionMatch  !== null} itemName='감정비우기'>감정 비우기
+                    <DropDown>
                             <DropDownList isActive={emptyMatch  !== null} onClick={() => navigate("/emotion/empty")}>감정 비우기</DropDownList>
                             <DropDownList isActive={shareMatch  !== null} onClick={() => navigate("/emotion/share")}>감정 나누기</DropDownList>
                     </DropDown>
