@@ -150,7 +150,7 @@ function SignUpBox () {
         const result = {
             username: data.id,
             nickname : data.nickname,
-            password: data.pw1,
+            password: data.pw,
         };
         try{
             await API.post('/api/v1/user/sign-up', result).then(
