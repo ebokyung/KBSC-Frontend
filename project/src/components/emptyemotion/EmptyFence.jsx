@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
@@ -197,28 +197,32 @@ function EmptyFence () {
     const [toggle, setToggle] = useState(false);
     const { register, handleSubmit, setValue } = useForm();
     const dragConstraints = useRef(null);
+    const [emotion, setEmotion] = useState([]);
+    const [deleteCnt, setDeleteCnt] = useState(0);
 
-    const onDrag = (event, info, id) => {
-        // console.log("delta",info.delta.y)
-        // console.log("offset",info.offset.y)
-        // console.log("point",info.point.y)
-        // console.log("velocity",info.velocity.y)
-        // console.log("=========================")
+    const getdata = async() => {
+        try{
+            const data = await LogAPI.get("/api/v1/emotion?type=private");
+            setEmotion(data.data.data);
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+    useEffect(()=>{
+        getdata();
+    },[deleteCnt])
+
+    const onDrag = async(event, info, id) => {
         if(info.delta.y < -20 && info.offset.y < -100){
-            console.log("삭제!!")
+            await LogAPI.delete(`/api/v1/emotion/${id}`);
+            setDeleteCnt(1);
         }
         if(info.point.y < 500 && info.offset.y < -50){
-            console.log("삭제22!!");
+            await LogAPI.delete(`/api/v1/emotion/${id}`);
+            setDeleteCnt(1);
         }
-        // if(info.point.y < 450){
-        //     if(info.offset.y < -50){
-        //         // 삭제
-        //     }
-        // }else if(info.point.y < 550){
-        //     if(info.offset.y < -)
-        // }
-        // console.log("offset",info.offset.y)
-        // console.log("point", info.point.y)
+
     }
 
 
@@ -233,11 +237,17 @@ function EmptyFence () {
             "content" : data.write,
             "status" : how
         }
-        await LogAPI.post("/api/v1/emotion", result).then(
-            response => {
-                console.log(response);
-            }
-        )
+        try{
+            await LogAPI.post("/api/v1/emotion", result).then(
+                response => {
+                    console.log(response);
+                }
+            )
+            const data = await LogAPI.get("/api/v1/emotion?type=private");
+            setEmotion(data.data.data);
+        }catch(error){
+            console.log(error)
+        }
         setValue("write", "")
     }
 
@@ -247,17 +257,17 @@ function EmptyFence () {
                 <Img src={fenceImg}></Img>
                 <EmotionBox>
                     <InnerBox variants={boxVariants} initial="start" animate="end">
-                        {test.map(i => 
+                        {emotion.map(i => 
                         <Item
-                            key={i.num}
+                            key={i.id}
                             variants={innerVariants}
                             drag
                             dragConstraints={dragConstraints}
                             onDrag={
-                                (event, info) => onDrag(event, info, i.num)
+                                (event, info) => onDrag(event, info, i.id)
                               }>
-                            <ItemDate>{i.date}</ItemDate>
-                            <ItemBody>{i.body}</ItemBody>
+                            <ItemDate>{i.createdDateTime.substr(0, 10).replace(/-/g, '.')}</ItemDate>
+                            <ItemBody>{i.content}</ItemBody>
                         </Item>)}
                     </InnerBox>
                 </EmotionBox>
