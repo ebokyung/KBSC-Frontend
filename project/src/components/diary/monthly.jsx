@@ -292,9 +292,6 @@ function DiaryMonthly () {
     const [isPrevBtnActive, setIsPrevBtnActive] = useState(false);
     const [isNextBtnActive, setIsNextBtnActive] = useState(false);
     const [updateContent, setUpdateContent] = useState(false);
-    // const [zIndex, setZIndex] = useState({
-    //     type: 'password',
-    // });
 
     // 클릭된 질문 index 알아내기
     const handleSelect = (index) => {

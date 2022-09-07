@@ -12,9 +12,8 @@ const Container = styled.section`
     height: 500px;
     margin-top: 40px;
     margin-bottom: 10%;
-    font-family: 'Nanum Myeongjo', serif;
-    display: flex;
-    justify-content: space-around;
+    /* font-family: 'Nanum Myeongjo', serif; */
+    position: relative;
 `
 
 const Input = styled.input`
@@ -52,6 +51,12 @@ function ClinicMap () {
 
         // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
         infowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+        // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+        var zoomControl = new kakao.maps.ZoomControl();
+        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+        map.setZoomable(false);
 
     },[place]);
 
@@ -158,23 +163,23 @@ function ClinicMap () {
         function getListItem(index, places) {
 
             var el = document.createElement('li'),
-            itemStr = '<span className={"${style.markerbg} ${style.marker_' + (index+1) + '}"}></span>' +
-                '<div className={style.info}>' +
-                '   <h5>' + places.place_name + '</h5>';
-
+            itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+                        '<div class="info">' +
+                        '   <h5>' + places.place_name + '</h5>';
+        
             if (places.road_address_name) {
                 itemStr += '    <span>' + places.road_address_name + '</span>' +
-                            '   <span className={`${style.jibun} ${style.gray}`>' +  places.address_name  + '</span>';
+                            '   <span class="jibun gray">' +  places.address_name  + '</span>';
             } else {
                 itemStr += '    <span>' +  places.address_name  + '</span>'; 
             }
-                        
-            itemStr += '  <span className={style.tel}>' + places.phone  + '</span>' +
+                         
+              itemStr += '  <span class="tel">' + places.phone  + '</span>' +
                         '</div>';           
-
+        
             el.innerHTML = itemStr;
             el.className = 'item';
-
+        
             return el;
         }
 
@@ -241,7 +246,7 @@ function ClinicMap () {
         // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
         // 인포윈도우에 장소명을 표시합니다
         function displayInfowindow(marker, title) {
-            var content = '<div style={{padding:"5px", z-index: "1"}}>' + title + '</div>';
+            var content = '<div style={{padding:"5px", z-index: "1", font-size: "12px"}}>' + title + '</div>';
 
             infowindow.setContent(content);
             infowindow.open(map, marker);
@@ -253,25 +258,22 @@ function ClinicMap () {
                 el.removeChild (el.lastChild);
             }
         }
-    // },[]);
-    
+
 
     return (
-        <Container>
-            <div className={style.map_wrap} style={{width:'100%',height:'100%',position:'relative'}}>
-                <div id="map" style={{width:'100%',height:'100%', position:'relative', overflow:'hidden'}}></div>
+        <Container className={style.map_wrap}>
+            <div id="map" style={{width:'100%',height:'100%', position:'relative', overflow:'hidden'}}></div>
 
-                <div id="menu_wrap" className={style.bg_white}>
-                    <div className={style.option}>
-                        <div style={{display: 'flex', justifyContent: 'center'}}>   
-                                <Input onChange={onChange} type="text" value={place} id="keyword" size="15" placeholder="지역명을 입력해주세요."/> 
-                                <button onClick={searchPlaces}>검색</button>
-                        </div>
+            <div id="menu_wrap" className={style.bg_white}>
+                <div className={style.option}>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>   
+                            <Input onChange={onChange} type="text" value={place} id="keyword" size="15" placeholder="지역명을 입력해주세요."/> 
+                            <button onClick={searchPlaces}>검색</button>
                     </div>
-                    <hr />
-                    <ul id="placesList"></ul>
-                    <div id="pagination"></div>
                 </div>
+                <hr />
+                <ul id="placesList"></ul>
+                <div id="pagination"></div>
             </div>
         </Container>
     )
