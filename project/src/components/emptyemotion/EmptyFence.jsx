@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import fenceImg from "../img/fence.png"
+import { LogAPI } from "../../axios";
 
 const Container = styled.section`
     width: 100%;
@@ -198,11 +199,45 @@ function EmptyFence () {
     const dragConstraints = useRef(null);
 
     const onDrag = (event, info, id) => {
-        console.log(id)
+        // console.log("delta",info.delta.y)
+        // console.log("offset",info.offset.y)
+        // console.log("point",info.point.y)
+        // console.log("velocity",info.velocity.y)
+        // console.log("=========================")
+        if(info.delta.y < -20 && info.offset.y < -100){
+            console.log("삭제!!")
+        }
+        if(info.point.y < 500 && info.offset.y < -50){
+            console.log("삭제22!!");
+        }
+        // if(info.point.y < 450){
+        //     if(info.offset.y < -50){
+        //         // 삭제
+        //     }
+        // }else if(info.point.y < 550){
+        //     if(info.offset.y < -)
+        // }
+        // console.log("offset",info.offset.y)
+        // console.log("point", info.point.y)
     }
 
 
-    const onValid = (data) => {
+    const onValid = async(data) => {
+        let how = ""
+        if (toggle){
+            how = "PUBLIC"
+        }else{
+            how = "PRIVATE"
+        }
+        const result = {
+            "content" : data.write,
+            "status" : how
+        }
+        await LogAPI.post("/api/v1/emotion", result).then(
+            response => {
+                console.log(response);
+            }
+        )
         setValue("write", "")
     }
 
