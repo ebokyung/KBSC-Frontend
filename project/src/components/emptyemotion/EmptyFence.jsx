@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import fenceImg from "../img/fence.png"
 import { LogAPI } from "../../axios";
@@ -92,6 +92,10 @@ const innerVariants = {
     end : {
       opacity: 1,
       y : 0
+    },
+    leaving : {
+        opacity: 0,
+        y : 100
     }
 }
 
@@ -160,45 +164,13 @@ const ToggleCircle = styled(motion.div)`
     border-radius: 50%;
 `
 
-const test = [
-    {   
-        num : 1,
-        date : "2022.08.09",
-        body : "인생을 전인 석가는 얼마나 고동을 뜨고, 것이다.보라, 봄바람이다. 인간의 오아이스도 있는 싶이 노년에게서 있을 약동하다. 하였으며, 이상 인생에 무엇이 피가 있는 눈에 석가는 온갖 약동하다."
-    },
-    {
-        num : 2,
-        date : "2022.08.11",
-        body : "피어나는 있으며, 일월과 따뜻한 않는 보라. 무엇을 생의 목숨을 열락의 우는 인도하겠다는 노래하며 그리하였는가? 없으면, 그들에게 크고 어디 예수는 위하여서. 꾸며 트고, 청춘이 보는 커다란 있다."
-    },
-    {
-        num : 3,
-        date : "2022.08.16",
-        body : "품으며, 어디 열락의 능히 있는 바이며, 것이다. 심장은 따뜻한 우리는 살았으며, 목숨이 있는 곳으로 칼이다."
-    },
-    {
-        num : 4,
-        date : "2022.08.12",
-        body : "열락의 이상 듣기만 청춘의 영원히 이상의 듣는다. 많이 대한 우리의 무한한 있을 두기 같은 불어 부패를 봄바람이다."
-    },
-    {
-        num : 5,
-        date : "2022.08.09",
-        body : "가지에 하였으며, 있는 피고, 동산에는 그들의 품에 미인을 풀밭에 부패뿐이다. 청춘의 실로 인생의 이상의 가지에 인간의 속잎나고, 힘차게 평화스러운 사막이다. "
-    },
-    {
-        num : 6,
-        date : "2022.08.09",
-        body : "인생을 전인 석가는 얼마나 고동을 뜨고, 것이다.보라, 봄바람이다. 인간의 오아이스도 있는 싶이 노년에게서 있을 약동하다. 하였으며, 이상 인생에 무엇이 피가 있는 눈에 석가는 온갖 약동하다."
-    },
-
-]
 function EmptyFence () {
     const [toggle, setToggle] = useState(false);
     const { register, handleSubmit, setValue } = useForm();
     const dragConstraints = useRef(null);
+    const [hidden , setHidden] = useState(-1);
     const [emotion, setEmotion] = useState([]);
-    const [deleteCnt, setDeleteCnt] = useState(0);
+    const fence = useRef();
 
     const getdata = async() => {
         try{
@@ -211,18 +183,20 @@ function EmptyFence () {
 
     useEffect(()=>{
         getdata();
-    },[deleteCnt])
+    },[])
+    
 
     const onDrag = async(event, info, id) => {
-        if(info.delta.y < -20 && info.offset.y < -100){
-            await LogAPI.delete(`/api/v1/emotion/${id}`);
-            setDeleteCnt(1);
+        console.log(info.point.y)
+        if(info.offset.y < -150 && info.offset.y > -180 && info.point.y < 400){
+            try{
+                setHidden(id)
+                await LogAPI.delete(`/api/v1/emotion/${id}`);
+            }catch(error){
+                console.log(error);
+            }
         }
-        if(info.point.y < 500 && info.offset.y < -50){
-            await LogAPI.delete(`/api/v1/emotion/${id}`);
-            setDeleteCnt(1);
-        }
-
+        event.preventDefault()
     }
 
 
@@ -254,21 +228,27 @@ function EmptyFence () {
     return(
         <Container ref={dragConstraints}>
             <Fence>
-                <Img src={fenceImg}></Img>
+                <Img ref={fence} src={fenceImg}></Img>
                 <EmotionBox>
                     <InnerBox variants={boxVariants} initial="start" animate="end">
-                        {emotion.map(i => 
-                        <Item
-                            key={i.id}
-                            variants={innerVariants}
-                            drag
-                            dragConstraints={dragConstraints}
-                            onDrag={
-                                (event, info) => onDrag(event, info, i.id)
-                              }>
-                            <ItemDate>{i.createdDateTime.substr(0, 10).replace(/-/g, '.')}</ItemDate>
-                            <ItemBody>{i.content}</ItemBody>
-                        </Item>)}
+                        <AnimatePresence>
+                            {emotion.map(i => 
+                            hidden == i.id ? null :
+                            <Item
+                                key={i.id}
+                                variants={innerVariants}
+                                initial = "start"
+                                exit = "leaving"
+                                drag
+                                transition={{ duration: 0.4}}
+                                dragConstraints={dragConstraints}
+                                onDrag={
+                                    (event, info) => onDrag(event, info, i.id)
+                                }>
+                                <ItemDate>{i.createdDateTime.substr(0, 10).replace(/-/g, '.')}</ItemDate>
+                                <ItemBody>{i.content}</ItemBody>
+                            </Item>)}
+                        </AnimatePresence>
                     </InnerBox>
                 </EmotionBox>
             </Fence>
