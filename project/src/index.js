@@ -10,10 +10,10 @@ const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <QueryClientProvider client={queryClient}>
-    <React.StrictMode>
+    {/* <React.StrictMode> */}
       <ThemeProvider theme={mainTheme}>
         <App />
       </ThemeProvider>
-    </React.StrictMode>
+    {/* </React.StrictMode> */}
   </QueryClientProvider>
 );
