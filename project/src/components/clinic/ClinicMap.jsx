@@ -1,228 +1,280 @@
 /* global kakao */
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import style from './Map.modul.css';
+
 
 const { kakao } = window;
 
 const Container = styled.section`
     width: 100%;
-    height: 400px;
+    height: 500px;
     margin-top: 40px;
     margin-bottom: 10%;
-    font-family: 'Nanum Myeongjo', serif;
-    display: flex;
-    justify-content: space-around;
-`
-const Section1 = styled.div`
-    width: 40%;
-    margin-right: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-`
-const Section2 = styled.div`
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-`
-// section 1
-const SearchForm = styled.form`
-    width: 100%;
-    height: 30px;
+    /* font-family: 'Nanum Myeongjo', serif; */
     position: relative;
-
 `
-const SearchBar = styled.input`
-    width: 100%;
-    height: 28px;
-    border: 1px solid #A2A2A6;
-    border-radius: 15px;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    resize:none;
-    ::placeholder {
-        color: #A2A2A6;
-        font-size: 11px;
-    }
+
+const Input = styled.input`
+    width: 80%;
     :focus {
-        outline-color: ${props=>props.theme.searchBarBorderColor};
-    }
-`
-const SearchBtn = styled.button`
-    position: absolute;
-    right: 0;
-    top: 15%;
-    margin-right: 8px;
-    width: 40px;
-    border-style: none;
-    background: none;
-    cursor: pointer;
-    color: #A2A2A6;
-    font-size: 15px;
-`
-
-const ScrollDiv = styled.div`
-    height: 85%;
-    overflow-y: scroll;
-    ::-webkit-scrollbar {
-        width: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-        background-color: #9F9E9E;
-    }
-    ::-webkit-scrollbar-track {
-        background-color: #D9D9D9;
+        outline-color: ${props=>props.theme.SubmitBtnBackColor};
     }
 `
 
-const MarkerItem = styled.li`
-    display: flex;
-    margin-bottom: 20px;
-`
-
-const MarkerIcon = styled.div`
-    width: 15%;
-`
-const Marker = styled.div`
-    width: 35px;
-    height: 35px;
-    border-radius: 50% 50% 50% 0;
-    background: ${props=>props.theme.markerBackColor};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: rotate(-45deg);
-    span {
-        transform: rotate(45deg);
-        color: white;
-        font-weight: 700;
-    }
-`
-const MarkerInfo = styled.div`
-    width: 85%;
-`
-
-const ItemTitle = styled.div`
-    color: ${props=>props.theme.markerBackColor};
-    font-weight: 700;
-    padding-bottom: 7px;
-`
-const ItemAddress = styled.div`
-    font-size: 14px;
-    padding-bottom: 7px;
-`
-const ItemTel = styled.div`
-    font-size: 14px;
-`
-
-// section 2
-const GuideDiv = styled.div`
-    font-size: 11px;
-    height: 30px;
-    text-align: right;
-    color: #A2A2A6;
-`
-const MapDiv = styled.div`
-    width: 100%;
-    height: 350px;
-`
-
-const markerdata = [
-    {
-        num : 1,
-        title : '심리상담소 턴',
-        address : '서울 강남구 선릉로 431 1110호',
-        tel : '02-512-2680',
-        lat : 37.5036273,
-        lng : 127.0490616,
-    },
-    {
-        num : 2,
-        title : '심리상담소 마음의 공간',
-        address : '서울 강남구 역삼로 228 한성빌딩 405호',
-        tel : '0507-1340-5628',
-        lat : 37.4968615,
-        lng : 127.0417397,
-    },
-    {
-        num : 3,
-        title : '마음돌봄상담센터 선릉상담소',
-        address : '서울 강남구 선릉로86길 31 롯데골드로즈 2차, 828호',
-        tel : '0507-1344-9133',
-        lat : 37.5043878,
-        lng : 127.051969,
-    },
-    {
-        num : 4,
-        title : '성신 아동 청소년 교육상담소',
-        address : '서울 강남구 선릉로86길 31 선릉역 롯데골드로즈2',
-        tel : '02-567-7685',
-        lat : 37.5043307,
-        lng : 127.0519973,
-    },
-];
 
 function ClinicMap () {
-    useEffect(() => {
-        let container = document.getElementById("map");
-    
-        let options = {
-          center: new window.kakao.maps.LatLng(37.5043307, 127.0519973),
-          level: 6,
-        };
-    
-        const map = new window.kakao.maps.Map(container, options);
-        
-        markerdata.forEach((el) => {
-            new kakao.maps.Marker({
-                //  마커가 표시될 지도
-                map: map,
-                // 마커가 표시될 위치
-                position: new kakao.maps.LatLng(el.lat, el.lng),
-                // 마커 hover시 나타날 title
-                title: el.title,
-            });
-        });
+    const [place, setPlace] = useState("");
+    const onChange = (event) => {
+        setPlace(event.target.value)
+    }
+    // // 마커를 담을 배열입니다
+    var markers = [];
+    var map;
+    var ps;
+    var infowindow;
+
+    useEffect(() =>{
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            mapOption = {
+                center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };  
+
+        // 지도를 생성합니다    
+        map = new kakao.maps.Map(mapContainer, mapOption); 
+
+        // 장소 검색 객체를 생성합니다
+        ps = new kakao.maps.services.Places();
+
+        // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
+        infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
         // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
         var zoomControl = new kakao.maps.ZoomControl();
         map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-    
-        // console.log("loading kakaomap");
-    }, []);
+
+        map.setZoomable(false);
+
+    },[place]);
+
+        // 키워드로 장소를 검색합니다
+        // searchPlaces();
+
+        // 키워드 검색을 요청하는 함수입니다
+        function searchPlaces() {
+
+            var keyword = place
+
+            if (!keyword.replace(/^\s+|\s+$/g, '')) {
+                alert('키워드를 입력해주세요!');
+                return false;
+            }
+            // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+            ps.keywordSearch(keyword, placesSearchCB); 
+        }
+
+        // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+        function placesSearchCB(data, status, pagination) {
+            console.log(data, status, pagination)
+            if (status === kakao.maps.services.Status.OK) {
+                
+                // 정상적으로 검색이 완료됐으면
+                // 검색 목록과 마커를 표출합니다
+                displayPlaces(data);
+
+                // 페이지 번호를 표출합니다
+                displayPagination(pagination);
+
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+
+                alert('검색 결과가 존재하지 않습니다.');
+                return;
+
+            } else if (status === kakao.maps.services.Status.ERROR) {
+
+                alert('검색 결과 중 오류가 발생했습니다.');
+                return;
+
+            }
+        }
+
+        // 검색 결과 목록과 마커를 표출하는 함수입니다
+        function displayPlaces(places) {
+
+            var listEl = document.getElementById('placesList'), 
+            menuEl = document.getElementById('menu_wrap'),
+            fragment = document.createDocumentFragment(), 
+            bounds = new kakao.maps.LatLngBounds(), 
+            listStr = '';
+            
+            // 검색 결과 목록에 추가된 항목들을 제거합니다
+            removeAllChildNods(listEl);
+
+            // 지도에 표시되고 있는 마커를 제거합니다
+            removeMarker();
+            
+            for ( var i=0; i<places.length; i++ ) {
+
+                // 마커를 생성하고 지도에 표시합니다
+                var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
+                    marker = addMarker(placePosition, i), 
+                    itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
+
+                // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+                // LatLngBounds 객체에 좌표를 추가합니다
+                bounds.extend(placePosition);
+
+                // 마커와 검색결과 항목에 mouseover 했을때
+                // 해당 장소에 인포윈도우에 장소명을 표시합니다
+                // mouseout 했을 때는 인포윈도우를 닫습니다
+                (function(marker, title) {
+                    kakao.maps.event.addListener(marker, 'mouseover', function() {
+                        displayInfowindow(marker, title);
+                    });
+
+                    kakao.maps.event.addListener(marker, 'mouseout', function() {
+                        infowindow.close();
+                    });
+
+                    itemEl.onmouseover =  function () {
+                        displayInfowindow(marker, title);
+                    };
+
+                    itemEl.onmouseout =  function () {
+                        infowindow.close();
+                    };
+                })(marker, places[i].place_name);
+
+                fragment.appendChild(itemEl);
+            }
+
+            // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
+            listEl.appendChild(fragment);
+            menuEl.scrollTop = 0;
+
+            // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+            map.setBounds(bounds);
+        }
+
+        // 검색결과 항목을 Element로 반환하는 함수입니다
+        function getListItem(index, places) {
+
+            var el = document.createElement('li'),
+            itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+                        '<div class="info">' +
+                        '   <h5>' + places.place_name + '</h5>';
+        
+            if (places.road_address_name) {
+                itemStr += '    <span>' + places.road_address_name + '</span>' +
+                            '   <span class="jibun gray">' +  places.address_name  + '</span>';
+            } else {
+                itemStr += '    <span>' +  places.address_name  + '</span>'; 
+            }
+                         
+              itemStr += '  <span class="tel">' + places.phone  + '</span>' +
+                        '</div>';           
+        
+            el.innerHTML = itemStr;
+            el.className = 'item';
+        
+            return el;
+        }
+
+        // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+        function addMarker(position, idx, title) {
+            var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+                imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+                imgOptions =  {
+                    spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+                    spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+                    offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+                },
+                markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+                    marker = new kakao.maps.Marker({
+                    position: position, // 마커의 위치
+                    image: markerImage 
+                });
+
+            marker.setMap(map); // 지도 위에 마커를 표출합니다
+            markers.push(marker);  // 배열에 생성된 마커를 추가합니다
+
+            return marker;
+        }
+
+        // 지도 위에 표시되고 있는 마커를 모두 제거합니다
+        function removeMarker() {
+            for ( var i = 0; i < markers.length; i++ ) {
+                markers[i].setMap(null);
+            }   
+            markers = [];
+        }
+
+        // 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
+        function displayPagination(pagination) {
+            var paginationEl = document.getElementById('pagination'),
+                fragment = document.createDocumentFragment(),
+                i; 
+
+            // 기존에 추가된 페이지번호를 삭제합니다
+            while (paginationEl.hasChildNodes()) {
+                paginationEl.removeChild (paginationEl.lastChild);
+            }
+
+            for (i=1; i<=pagination.last; i++) {
+                var el = document.createElement('a');
+                el.href = "#";
+                el.innerHTML = i;
+
+                if (i===pagination.current) {
+                    el.className = 'on';
+                } else {
+                    el.onclick = (function(i) {
+                        return function() {
+                            pagination.gotoPage(i);
+                        }
+                    })(i);
+                }
+
+                fragment.appendChild(el);
+            }
+            paginationEl.appendChild(fragment);
+        }
+
+        // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
+        // 인포윈도우에 장소명을 표시합니다
+        function displayInfowindow(marker, title) {
+            var content = '<div style={{padding:"5px", z-index: "1", font-size: "12px"}}>' + title + '</div>';
+
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+        }
+
+        // 검색결과 목록의 자식 Element를 제거하는 함수입니다
+        function removeAllChildNods(el) {   
+            while (el.hasChildNodes()) {
+                el.removeChild (el.lastChild);
+            }
+        }
+
 
     return (
-        <Container>
-            <Section1>
-                {/* version 1 : 직접 입력 */}
-                <SearchForm>
-                    <SearchBar placeholder="지역(읍/면/동) 을 입력해주세요." />
-                    <SearchBtn><FontAwesomeIcon icon={faMagnifyingGlass} /></SearchBtn>
-                </SearchForm>
-                <ScrollDiv>
-                    <ul>
-                        {markerdata.map(i=>
-                            <MarkerItem key={i.num}>
-                                <MarkerIcon><Marker><span>{i.num}</span></Marker></MarkerIcon>
-                                <MarkerInfo>
-                                    <ItemTitle>{i.title}</ItemTitle>
-                                    <ItemAddress>{i.address}</ItemAddress>
-                                    <ItemTel>{i.tel}</ItemTel>
-                                </MarkerInfo>
-                            </MarkerItem>
-                        )}
-                    </ul>
-                </ScrollDiv>
-            </Section1>
-            <Section2>
-                <GuideDiv>
-                    <p>* 국가공인 상담자격증 보유 상담소가 모두 노출되며 상담소는 한울과 무관합니다.</p>
-                </GuideDiv>
-                <MapDiv id="map"></MapDiv>
-            </Section2>
+        <Container className={style.map_wrap}>
+            <div id="map" style={{width:'100%',height:'100%', position:'relative', overflow:'hidden'}}></div>
+
+            <div id="menu_wrap" className={style.bg_white}>
+                <div className={style.option}>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>   
+                            <Input onChange={onChange} type="text" value={place} id="keyword" size="15" placeholder="지역명을 입력해주세요."/> 
+                            <button onClick={searchPlaces}>검색</button>
+                    </div>
+                </div>
+                <hr />
+                <ul id="placesList"></ul>
+                <div id="pagination"></div>
+            </div>
         </Container>
     )
 }
