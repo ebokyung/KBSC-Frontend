@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import PageHeader from "../components/PageHeader";
-import WeeklyTop from '../components/shareemotion/WeeklyTop';
 import RealTime from '../components/shareemotion/RealTime';
 
 const Container = styled.body`
@@ -29,7 +28,6 @@ function ShareEmotion () {
         <Container>
             <Wrapper>
                 <PageHeader props={pageheader} />
-                <WeeklyTop />
                 <RealTime />
             </Wrapper>
         </Container>
