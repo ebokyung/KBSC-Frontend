@@ -233,7 +233,7 @@ function EmptyFence () {
                     <InnerBox variants={boxVariants} initial="start" animate="end">
                         <AnimatePresence>
                             {emotion.map(i => 
-                            hidden == i.id ? null :
+                            hidden === i.id ? null :
                             <Item
                                 key={i.id}
                                 variants={innerVariants}
