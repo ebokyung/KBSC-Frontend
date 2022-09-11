@@ -1,17 +1,29 @@
 import styled from "styled-components";
 import PageHeader from '../components/PageHeader';
+import MyChatting from '../components/chat/MyChatting';
+import AllChatting from '../components/chat/AllChatting';
 
 const Container = styled.body`
     width: 100vw;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     margin-top: ${props => props.theme.navmarginTop};
 `
 
 const Wrapper = styled.section`
     width : ${props => props.theme.width};
     max-width: ${props => props.theme.maxWidth};
-    min-height: ${props => props.theme.minHeight};
+    margin: auto;
+`
+
+const Wrapper2 = styled.section`
+    width : 100%;
+    max-width: ${props => props.theme.maxWidth};
+    background-color: ${props => props.theme.bgColor};
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
 `
 
 const pageheader = {
@@ -27,6 +39,12 @@ function Chat () {
             <Wrapper>
                 <PageHeader props={pageheader} />
             </Wrapper>
+            <Wrapper2>
+                <MyChatting />
+            </Wrapper2>
+            <Wrapper2>
+                <AllChatting />
+            </Wrapper2>
         </Container>
     );
 }
