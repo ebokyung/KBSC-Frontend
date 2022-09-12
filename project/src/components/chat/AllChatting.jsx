@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import styled, { css } from "styled-components";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle as regularCircle } from '@fortawesome/free-regular-svg-icons';
+import { faCircle as solidCircle } from '@fortawesome/free-solid-svg-icons';
+
 
 const Container = styled.section`
     width: 100%;
@@ -9,6 +13,7 @@ const Container = styled.section`
     display:flex;
     align-items: center;
     flex-direction: column;
+    padding-bottom: 100px;
 `
 const Tab = styled.div`
     width: 100%;
@@ -20,7 +25,7 @@ const Tab = styled.div`
 `
 const TabTitle = styled.span`
     width: 180px;
-    height: 30px;
+    height: 35px;
     background-color: ${props => props.theme.tabTitleColor};
     display: flex;
     justify-content: center;
@@ -32,32 +37,33 @@ const TabTitle = styled.span`
 const Categories = styled.span`
     font-size: 13px;
     font-weight: 600;
-    color: gray;
+    color: ${props => props.theme.tabInfoColor};
     display: flex;
     align-items: center;
 `
 const Category = styled.span`
     padding-left: 5px;
-    color: ${props => props.isActive ? props.theme.tabTitleColor : 'gray'};
+    color: ${props => props.isActive ? props.theme.tabTitleColor : props.theme.proceedingColor};
     cursor: pointer;
 `
 
 const Wrap = styled.div`
-    padding: 30px 7%;
+    padding: 40px 7%;
     width: 100%;
     min-height: 200px;
     
 `
 const ChatDiv = styled.div`
     width: 100%;
-    height: 100px;
-    margin-bottom: 20px;
+    height: 105px;
+    margin-bottom: 13px;
     background-color: white;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 1.5% 2%;
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 1px 3px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 `
 const ChatStateDiv = styled.div`
     width: 100%;
@@ -67,9 +73,13 @@ const ChatStateDiv = styled.div`
 `
 
 const ChatStateSpan = styled.span`
-    font-size: 11px;
+    display: flex;
+    align-items: center;
+    /* font-family: 'Apple SD Gothic Neo B00', serif; */
+    /* font-weight: 400; */
+    font-size: 10px;
     padding-right: 5px;
-    color: ${props => props.state === '0' ? "gray" : props.state === '1' ? props.theme.tabTitleColor : "red"};
+    color: ${props => props.state === '0' ? props.theme.proceedingColor : props.state === '1' ? props.theme.willColor : props.theme.wantColor};
 `
 
 const ChatTitle = styled.div`
@@ -101,12 +111,13 @@ const ChatBtn = styled.button`
     width: 130px;
     height: 25px;
     border-style: solid;
-    border-radius: 3px;
+    border-width: thin;
+    border-radius: 5px;
     font-size: 12px;
     cursor: pointer;
-    border-color: ${props => props.state === '0' ? "gray" : props.state === '1' ? props.theme.tabTitleColor : "red"};
-    color: ${props => props.state === '0' ? "white" : props.state === '1' ? props.theme.tabTitleColor : "red"};
-    background-color: ${props => props.state === '0' ? "gray" : "white"};
+    border-color: ${props => props.state === '0' ? props.theme.btnBlockColor : props.state === '1' ? props.theme.willColor : props.theme.wantColor};
+    color: ${props => props.state === '0' ? "white" : props.state === '1' ? props.theme.willColor : props.theme.wantColor};
+    background-color: ${props => props.state === '0' ? props.theme.btnBlockColor : "white"};
 `
 
 const testAll = [
@@ -228,7 +239,7 @@ function AllChatting () {
                         i.state === 0 ? 
                         <>
                             <ChatStateDiv>
-                                <ChatStateSpan state='0'>상담 진행 중</ChatStateSpan> 
+                                <ChatStateSpan state='0'><FontAwesomeIcon icon={regularCircle} size="2xs" style={{paddingRight: '6px'}}/>상담 진행 중</ChatStateSpan> 
                             </ChatStateDiv> 
                             <ChatTitle>
                                 {i.title}
@@ -245,7 +256,7 @@ function AllChatting () {
                         : i.state === 1 ?
                         <>
                             <ChatStateDiv>
-                                <ChatStateSpan state='1'>상담 해드려요</ChatStateSpan> 
+                                <ChatStateSpan state='1'><FontAwesomeIcon icon={solidCircle} size="2xs" style={{paddingRight: '6px'}}/>상담해드려요</ChatStateSpan> 
                             </ChatStateDiv> 
                             <ChatTitle>
                                 {i.title}
@@ -262,7 +273,7 @@ function AllChatting () {
                         :
                         <>
                             <ChatStateDiv>
-                                <ChatStateSpan state='2'>상담 해주세요</ChatStateSpan> 
+                                <ChatStateSpan state='2'><FontAwesomeIcon icon={solidCircle} size="2xs" style={{paddingRight: '6px'}}/>상담해주세요</ChatStateSpan> 
                             </ChatStateDiv> 
                             <ChatTitle>
                                 {i.title}
