@@ -49,6 +49,9 @@ export const mainTheme ={
     // 로그인, 회원가입 페이지
     logBtnBackColor : "#55BC98",
 
+    // 채팅 페이지 색상들
+    bgColor : "rgba(203, 233, 222, 0.2)",
+    tabTitleColor : "#55BC98",
 }
 
 // ${props => props.theme.~~};와 같은 방법으로 적용
