@@ -10,6 +10,7 @@ import Chat from './routes/Chat';
 import Clinic from './routes/Clinic';
 import LogoIn from './routes/LogIn';
 import SignUp from './routes/SignUp';
+import ChatRoom from './routes/ChatRoom';
 
 function Routers() {
     return(
@@ -22,6 +23,7 @@ function Routers() {
                 <Route path="/diary" element={<Diary />} />
                 <Route path="/mission" element={<Mission />} />
                 <Route path="/chat" element={<Chat />} />
+                <Route path="/chat/room/*" element={<ChatRoom />} />
                 <Route path="/clinic" element={<Clinic />} />
                 <Route path="/login" element={<LogoIn />} />
                 <Route path="/signup" element={<SignUp/>} />
