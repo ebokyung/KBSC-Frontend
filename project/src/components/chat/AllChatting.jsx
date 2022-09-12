@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle as regularCircle } from '@fortawesome/free-regular-svg-icons';
 import { faCircle as solidCircle } from '@fortawesome/free-solid-svg-icons';
@@ -34,17 +33,29 @@ const TabTitle = styled.span`
     color: white;
     font-weight: 600;
 `
-const Categories = styled.span`
-    font-size: 13px;
+const TabCategories = styled.span`
     font-weight: 600;
+    font-size: 13px;
     color: ${props => props.theme.tabInfoColor};
     display: flex;
     align-items: center;
 `
-const Category = styled.span`
-    padding-left: 5px;
-    color: ${props => props.isActive ? props.theme.tabTitleColor : props.theme.proceedingColor};
+
+const TabCategoryLabel = styled.label`
+    padding-right: 5px;
     cursor: pointer;
+    /* color: ${props => props.theme.proceedingColor}; */
+`
+const TabCategoryInput = styled.input`
+    display: none;
+    &:checked + ${TabCategoryLabel} {
+        color: ${props => props.theme.willColor};
+    }
+`
+const Span = styled.span`
+    font-size: 10px;
+    padding-right: 5px;
+    color: ${props => props.theme.proceedingColor};
 `
 
 const Wrap = styled.div`
@@ -79,7 +90,7 @@ const ChatStateSpan = styled.span`
     /* font-weight: 400; */
     font-size: 10px;
     padding-right: 5px;
-    color: ${props => props.state === '0' ? props.theme.proceedingColor : props.state === '1' ? props.theme.willColor : props.theme.wantColor};
+    color: ${props => props.state === 0 ? props.theme.proceedingColor : props.state === 1 ? props.theme.willColor : props.theme.wantColor};
 `
 
 const ChatTitle = styled.div`
@@ -115,14 +126,14 @@ const ChatBtn = styled.button`
     border-radius: 5px;
     font-size: 12px;
     cursor: pointer;
-    border-color: ${props => props.state === '0' ? props.theme.btnBlockColor : props.state === '1' ? props.theme.willColor : props.theme.wantColor};
-    color: ${props => props.state === '0' ? "white" : props.state === '1' ? props.theme.willColor : props.theme.wantColor};
-    background-color: ${props => props.state === '0' ? props.theme.btnBlockColor : "white"};
+    border-color: ${props => props.state === 0 ? props.theme.btnBlockColor : props.state === 1 ? props.theme.willColor : props.theme.wantColor};
+    color: ${props => props.state === 0 ? "white" : props.state === 1 ? props.theme.willColor : props.theme.wantColor};
+    background-color: ${props => props.state === 0 ? props.theme.btnBlockColor : "white"};
 `
 
 const testAll = [
     {
-        id: 12,
+        id: 1,
         state: 0,
         title: "사소한 것도 칭찬하는 방! 칭찬이 필요한 모든 분들 환영합니다.",
         nickname: "내닉네임",
@@ -130,7 +141,7 @@ const testAll = [
         category: 'will',
     },
     {
-        id: 23,
+        id: 2,
         state: 1,
         title: "답답한 마음을 모두 털어 놓아요. 하나 하나 진심으로 듣고 조언해드릴게요!",
         nickname: "내닉네임",
@@ -138,7 +149,7 @@ const testAll = [
         category: 'will',
     },
     {
-        id: 34,
+        id: 3,
         state: 2,
         title: "저만 아는 고민이 있어요. 들어주실래요?",
         nickname: "내닉네임",
@@ -146,7 +157,7 @@ const testAll = [
         category: 'want',
     },
     {
-        id: 45,
+        id: 4,
         state: 1,
         title: "하고 싶은 말 다 할 수 있는 방. 자유롭게 들어오세요.",
         nickname: "내닉네임",
@@ -154,143 +165,128 @@ const testAll = [
         category: 'will',
     },
     {
-        id: 56,
+        id: 5,
         state: 2,
         title: "인간 관계는 정말 어려운 것 같아요... 자꾸만 포기하고 싶어지네요",
-        nickname: "내닉네임",
-        recommand: 24,
+        nickname: "배고파",
+        recommand: 82,
         category: 'want',
+    },
+    {
+        id: 6,
+        state: 2,
+        title: "악몽이 매일 반복돼요. 언제쯤 벗어날 수 있을까요? 비슷한 경험 해보신 분 계신가요? 같이 이야기 나눠요",
+        nickname: "개설자 닉네임",
+        recommand: 87,
+        category: 'want',
+    },
+    {
+        id: 7,
+        state: 1,
+        title: "위로가 필요한 당신을 위한 공간",
+        nickname: "내닉네임",
+        recommand: 87,
+        category: 'will',
+    },
+    {
+        id: 8,
+        state: 0,
+        title: "그냥 웃자!",
+        nickname: "내닉네임",
+        recommand: 87,
+        category: 'will',
+    },
+    {
+        id: 9,
+        state: 0,
+        title: "어우 졸려라",
+        nickname: "내닉네임",
+        recommand: 87,
+        category: 'will',
     },
 ]
 
-const categoryArr = [
-    {
-        id: 11,
-        index: 0,
-        category: 'All',
-        title: '모두',
-        isActive: true,
-    },
-    {
-        id: 22,
-        index: 1,
-        category: 'will',
-        title: '상담 해드려요',
-        isActive: false,
-    },
-    {
-        id: 33,
-        index: 2,
-        category: 'want',
-        title: '상담 해주세요',
-        isActive: false,
-    },
-]
+// category: all - 모두
+// category: will - 상담해드려요
+// category: want - 상담해주세요
+// state: 0 - 채팅 중
+// state: 1,2 - 대기 중
 
 function AllChatting () {    
-    const [myChat, setMyChat] = useState(testAll);
-    // const [isClickedCategory, setIsClickedCategory] = useState([true, false, false]);
-    // const [click]
+    const [ChatList, setChatList] = useState(testAll);
+    const [checkCategory, setCheckCategory] = useState('all');
 
-    const handleCategory = ( idx ) => {
-        // 클릭된 카테고리 확인하기
-        // const newArr = Array(category.length).fill(false);
-        // newArr[idx] = true;
-        // setIsClickedCategory(newArr);
-        // console.log('isClickedCategory: ', isClickedCategory);
-
-        // 클릭된 카테고리 상태 변화
-        categoryArr.map(i => i.isActive = false);
-        categoryArr[idx].isActive = true;
-        console.log('category arr:', categoryArr);
-
-
-
-        // // 클릭된 카테고리에 해당되는 데이터만 필터링하기
-        // isClickedCategory === [true, false, false]
-        // ? setMyChat(testAll)
-        // : isClickedCategory === [false, true, false]
-        // ? setMyChat(testAll.filter(i => i.category === 'will'))
-        // : setMyChat(testAll.filter(i => i.category === 'want'))
+    const handleChange2 = (e) => {
+        let newArr = [];
+        const value = e.target.value;
+        setCheckCategory(value);
+        if(value === 'all') {
+            newArr = testAll
+        }else{
+            newArr = testAll.filter(i => i.category === value);
+        } 
+        setChatList( newArr );
     }
-
-    const clickEvent = (e) => {
-        console.log(e.target);
-        handleCategory(e.target.index)
-        console.log(e.target.category);
-    }
+    console.log(ChatList);
 
     return(
         <Container>
             <Tab>
                 <TabTitle>소통방 목록</TabTitle>
-                <Categories>
-                    {categoryArr.map(i => 
-                        <Category key={i.id} isActive={i.isActive} onClick={(e)=>clickEvent(e)} >
-                           | {i.title}
-                        </Category>
-                    )}     
-                </Categories>
+                <TabCategories>
+                    <TabCategoryInput 
+                        type="radio" 
+                        name="categories" 
+                        id="all" 
+                        value="all"
+                        onChange={handleChange2} 
+                        checked={checkCategory === "all"}/> 
+                    <TabCategoryLabel htmlFor="all">모두</TabCategoryLabel>
+                    <Span>|</Span>
+                    <TabCategoryInput 
+                        type="radio" 
+                        name="categories" 
+                        id="will2" 
+                        value="will"  
+                        onChange={handleChange2}
+                        checked={checkCategory === "will"}/> 
+                    <TabCategoryLabel htmlFor="will2">상담해드려요</TabCategoryLabel>
+                    <Span>|</Span>
+                    <TabCategoryInput 
+                        type="radio" 
+                        name="categories" 
+                        id="want2" 
+                        value="want"  
+                        onChange={handleChange2}
+                        checked={checkCategory === "want"}/> 
+                    <TabCategoryLabel htmlFor="want2">상담해주세요</TabCategoryLabel>
+                </TabCategories>
             </Tab>
             <Wrap>
-                {myChat.map(i => 
+                {ChatList.map(i => 
                     <ChatDiv key={i.id}>
-                        {
-                        i.state === 0 ? 
-                        <>
-                            <ChatStateDiv>
-                                <ChatStateSpan state='0'><FontAwesomeIcon icon={regularCircle} size="2xs" style={{paddingRight: '6px'}}/>상담 진행 중</ChatStateSpan> 
-                            </ChatStateDiv> 
-                            <ChatTitle>
-                                {i.title}
-                            </ChatTitle>
-                            <ChatFooterDiv>
-                                <ChatFooterInfoDiv>
-                                    <ChatFooterInfoSpan>{i.nickname}</ChatFooterInfoSpan>
-                                    <ChatFooterInfoSpan>|</ChatFooterInfoSpan>
-                                    <ChatFooterInfoSpan>{i.recommand}명 추천</ChatFooterInfoSpan>
-                                </ChatFooterInfoDiv>
-                                <ChatBtn state='0'>{i.category === 'will' ? '상담받기' : '상담하기'}</ChatBtn>
-                            </ChatFooterDiv>
-                        </>
-                        : i.state === 1 ?
-                        <>
-                            <ChatStateDiv>
-                                <ChatStateSpan state='1'><FontAwesomeIcon icon={solidCircle} size="2xs" style={{paddingRight: '6px'}}/>상담해드려요</ChatStateSpan> 
-                            </ChatStateDiv> 
-                            <ChatTitle>
-                                {i.title}
-                            </ChatTitle>
-                            <ChatFooterDiv>
-                                <ChatFooterInfoDiv>
-                                    <ChatFooterInfoSpan>{i.nickname}</ChatFooterInfoSpan>
-                                    <ChatFooterInfoSpan>|</ChatFooterInfoSpan>
-                                    <ChatFooterInfoSpan>{i.recommand}명 추천</ChatFooterInfoSpan>
-                                </ChatFooterInfoDiv>
-                                <ChatBtn state='1'>상담하기</ChatBtn>
-                            </ChatFooterDiv>
-                        </>
-                        :
-                        <>
-                            <ChatStateDiv>
-                                <ChatStateSpan state='2'><FontAwesomeIcon icon={solidCircle} size="2xs" style={{paddingRight: '6px'}}/>상담해주세요</ChatStateSpan> 
-                            </ChatStateDiv> 
-                            <ChatTitle>
-                                {i.title}
-                            </ChatTitle>
-                            <ChatFooterDiv>
-                                <ChatFooterInfoDiv>
-                                    <ChatFooterInfoSpan>{i.nickname}</ChatFooterInfoSpan>
-                                    <ChatFooterInfoSpan>|</ChatFooterInfoSpan>
-                                    <ChatFooterInfoSpan>{i.recommand}명 추천</ChatFooterInfoSpan>
-                                </ChatFooterInfoDiv>
-                                <ChatBtn state='2'>상담받기</ChatBtn>
-                            </ChatFooterDiv>
-                        </>
-                        }
+                        <ChatStateDiv>
+                            {i.state === 0 
+                            ? <ChatStateSpan state={i.state}><FontAwesomeIcon icon={regularCircle} size="2xs" style={{paddingRight: '6px'}}/>상담 진행 중 </ChatStateSpan> 
+                            : i.category === 'will' 
+                            ? <ChatStateSpan state={i.state}><FontAwesomeIcon icon={solidCircle} size="2xs" style={{paddingRight: '6px'}}/>상담해드려요 </ChatStateSpan>
+                            : <ChatStateSpan state={i.state}><FontAwesomeIcon icon={solidCircle} size="2xs" style={{paddingRight: '6px'}}/>상담해주세요 </ChatStateSpan>
+                            }
+                        </ChatStateDiv> 
+                        <ChatTitle>
+                            {i.title}
+                        </ChatTitle>
+                        <ChatFooterDiv>
+                            <ChatFooterInfoDiv>
+                                <ChatFooterInfoSpan>{i.nickname}</ChatFooterInfoSpan>
+                                <Span>|</Span>
+                                <ChatFooterInfoSpan>{i.recommand}명 추천</ChatFooterInfoSpan>
+                            </ChatFooterInfoDiv>
+                            <ChatBtn state={i.state}>{i.category === 'will' ? '상담받기' : '상담하기'}</ChatBtn>
+                        </ChatFooterDiv>
                     </ChatDiv>
-                )}
-                
+                )
+                }
             </Wrap>
         </Container>
         
