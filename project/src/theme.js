@@ -57,6 +57,10 @@ export const mainTheme ={
     wantColor : "#F1A6A0",
     proceedingColor : "#A2A2A6",
     btnBlockColor : "rgba(218, 218, 218, 1)",
+
+    // 채팅방 페이지 색상들
+    whoColor : "#55BC98",
+    chatBoxBackColor : "#CBE9DE",
 }
 
 // ${props => props.theme.~~};와 같은 방법으로 적용

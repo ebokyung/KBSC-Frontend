@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { useState } from 'react';
 import { useEffect } from 'react';
 import $ from 'jquery';
 import logoImg from "../components/img/logo.png";
@@ -120,7 +119,7 @@ function NavBar () {
     const mainMatch = useMatch("/");
     const diaryMatch = useMatch("/diary");
     const missionMatch = useMatch("/mission");
-    const chatMatch = useMatch("/chat");
+    const chatMatch = useMatch("/chat/*");
     const clinicMatch = useMatch("/clinic");
 
     useEffect(() => {
