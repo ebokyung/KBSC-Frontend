@@ -52,6 +52,11 @@ export const mainTheme ={
     // 채팅 페이지 색상들
     bgColor : "rgba(203, 233, 222, 0.2)",
     tabTitleColor : "#55BC98",
+    tabInfoColor : "#A2A2A6",
+    willColor : "#55BC98",
+    wantColor : "#F1A6A0",
+    proceedingColor : "#A2A2A6",
+    btnBlockColor : "rgba(218, 218, 218, 1)",
 
     // 채팅방 페이지 색상들
     whoColor : "#55BC98",
