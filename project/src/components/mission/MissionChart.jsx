@@ -1,5 +1,7 @@
 import ApexChart from "react-apexcharts"
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { isColor } from "../../atoms";
 import "./box.css";
  
 const Container = styled.section`
@@ -10,6 +12,20 @@ const Container = styled.section`
 
 
 function MissionChart () {
+    const theme = useRecoilValue(isColor);
+    const whatColor = () => {
+        if (theme === 1){
+            return "#F1A6A0"
+        }else if (theme === 2){
+            return "#FFC659"
+        }else if (theme === 3){
+            return "#98D4BF"
+        }else if (theme === 4){
+            return "#92A4E3"
+        }else{
+            return "#B19EE8"
+        }
+    }
     return (
         <Container>
             <ApexChart 
@@ -34,7 +50,7 @@ function MissionChart () {
             },
             markers : {
                 size: 8,
-                colors: `#98D4BF`,
+                colors: whatColor(),
                 strokeColors: '#fff',
                 strokeWidth: 3,
                 hover: {
@@ -116,7 +132,7 @@ function MissionChart () {
             stroke: {               // line 스타일 설정
                 curve: "smooth",    // line을 부드럽게 만들어줌
                 width: 4,           // line 두께 설정
-                color : `${props => props.theme.lineColor}`
+                colors : whatColor()
             },
         }}
         />

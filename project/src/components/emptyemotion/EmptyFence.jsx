@@ -2,8 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm } from "react-hook-form";
-import fenceImg from "../img/fence.png"
+import fenceImg3 from "../img/fence.png"
+import fenceImg1 from "../img/rfence.png"
+import fenceImg2 from "../img/yfence.png"
+import fenceImg4 from "../img/bfence.png"
+import fenceImg5 from "../img/pfence.png"
 import { LogAPI } from "../../axios";
+import { useRecoilValue } from 'recoil';
+import { isColor } from "../../atoms";
 
 const Container = styled.section`
     width: 100%;
@@ -48,6 +54,7 @@ const Item = styled(motion.div)`
     margin-right: 4%;
     border-radius: 10px;
     height: fit-content;
+    margin-bottom: 30px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
     &:active{
         z-index: 100;
@@ -164,6 +171,18 @@ const ToggleCircle = styled(motion.div)`
     border-radius: 50%;
 `
 
+const FirstLine = styled(motion.div)`
+    
+`
+
+const SecondLine = styled(motion.div)`
+    
+`
+
+const ThirdLine = styled(motion.div)`
+    
+`
+
 function EmptyFence () {
     const [toggle, setToggle] = useState(false);
     const { register, handleSubmit, setValue } = useForm();
@@ -185,6 +204,7 @@ function EmptyFence () {
         getdata();
     },[])
     
+    console.log(emotion)
 
     const onDrag = async(event, info, id) => {
         console.log(info.point.y)
@@ -192,6 +212,11 @@ function EmptyFence () {
             try{
                 setHidden(id)
                 await LogAPI.delete(`/api/v1/emotion/${id}`);
+                setEmotion((prev) => {
+                    const targetIndex = prev.findIndex(prev => prev.id === id)
+                    return [...prev.slice(0, targetIndex), ...prev.slice(targetIndex+1)]
+            })
+                
             }catch(error){
                 console.log(error);
             }
@@ -225,15 +250,23 @@ function EmptyFence () {
         setValue("write", "")
     }
 
+    const iscolor = useRecoilValue(isColor)
+
     return(
         <Container ref={dragConstraints}>
             <Fence>
-                <Img ref={fence} src={fenceImg}></Img>
+                <Img ref={fence} src={
+                    iscolor === 1 ? fenceImg1 :
+                        iscolor === 2 ? fenceImg2 : 
+                            iscolor === 3 ? fenceImg3 : 
+                                iscolor === 4 ? fenceImg4: fenceImg5
+                }></Img>
                 <EmotionBox>
                     <InnerBox variants={boxVariants} initial="start" animate="end">
-                        <AnimatePresence>
-                            {emotion.map(i => 
-                            hidden === i.id ? null :
+                    <AnimatePresence>
+                        <FirstLine>
+                            {emotion.filter(prev => emotion.indexOf(prev) % 3 === 0).map(i => 
+                                hidden === i.id ? null :
                             <Item
                                 key={i.id}
                                 variants={innerVariants}
@@ -248,6 +281,43 @@ function EmptyFence () {
                                 <ItemDate>{i.createdDateTime.substr(0, 10).replace(/-/g, '.')}</ItemDate>
                                 <ItemBody>{i.content}</ItemBody>
                             </Item>)}
+                        </FirstLine>
+                        <SecondLine>
+                            {emotion.filter(prev => emotion.indexOf(prev) % 3 === 1).map(i => 
+                                hidden === i.id ? null :
+                            <Item
+                                key={i.id}
+                                variants={innerVariants}
+                                initial = "start"
+                                exit = "leaving"
+                                drag
+                                transition={{ duration: 0.4}}
+                                dragConstraints={dragConstraints}
+                                onDrag={
+                                    (event, info) => onDrag(event, info, i.id)
+                                }>
+                                <ItemDate>{i.createdDateTime.substr(0, 10).replace(/-/g, '.')}</ItemDate>
+                                <ItemBody>{i.content}</ItemBody>
+                            </Item>)}
+                        </SecondLine>
+                        <ThirdLine>
+                            {emotion.filter(prev => emotion.indexOf(prev) % 3 === 2).map(i => 
+                                hidden === i.id ? null :
+                            <Item
+                                key={i.id}
+                                variants={innerVariants}
+                                initial = "start"
+                                exit = "leaving"
+                                drag
+                                transition={{ duration: 0.4}}
+                                dragConstraints={dragConstraints}
+                                onDrag={
+                                    (event, info) => onDrag(event, info, i.id)
+                                }>
+                                <ItemDate>{i.createdDateTime.substr(0, 10).replace(/-/g, '.')}</ItemDate>
+                                <ItemBody>{i.content}</ItemBody>
+                            </Item>)}
+                        </ThirdLine>
                         </AnimatePresence>
                     </InnerBox>
                 </EmotionBox>
