@@ -11,6 +11,7 @@ import Clinic from './routes/Clinic';
 import LogoIn from './routes/LogIn';
 import SignUp from './routes/SignUp';
 import ChatRoom from './routes/ChatRoom';
+import ThemeCustom from './routes/ThemeCustom';
 
 function Routers() {
     return(
@@ -28,6 +29,7 @@ function Routers() {
                 <Route path="/login" element={<LogoIn />} />
                 <Route path="/signup" element={<SignUp/>} />
             </Routes>
+            <ThemeCustom />
             <Footer />
         </Router>
     )

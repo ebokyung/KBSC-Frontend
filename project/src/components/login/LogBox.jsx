@@ -26,7 +26,7 @@ const Title = styled.h1`
     font-family: 'Nanum Myeongjo', serif;
     font-size: 26px;
     font-weight: 600;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 `
 
 const Form = styled.form`

@@ -4,6 +4,7 @@ import { faTriangleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 const HeadContainer = styled.body`
     width: 100vw;
@@ -199,13 +200,14 @@ const ChatWrapper = styled.section`
     display: flex;
     flex-direction: column-reverse;
     overflow-y: scroll;
+    margin-bottom: 30px;
 `
 
 const ChatItem = styled.div`
     display: flex;
     align-items: flex-end;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 `
 
 const ChatTime = styled.span`
@@ -251,6 +253,45 @@ const ChatInfo = styled.div`
     span:first-child{
         margin-bottom: 10px;
     }
+`
+
+const ChatInputSection = styled.section`
+    width: 100vw;
+    background-color: white;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+const ChatInputForm = styled.form`
+    width : ${props => props.theme.width};
+    max-width: ${props => props.theme.maxWidth};
+    display: flex;
+    justify-content: space-between;
+`
+
+const ChatInputInput = styled.input`
+    width: 82%;
+    border: 1px solid #A2A2A6;
+    border-radius: 3px;
+    padding: 7px 10px;
+    ::placeholder {
+        color: #A2A2A6;
+    }
+    :focus {
+        outline-color: ${props=>props.theme.SubmitBtnBackColor};
+    }
+`
+
+const ChatInputBtn = styled.button`
+    width: 13%;
+    color:white;
+    border: none;
+    border-radius: 3px;
+    background-color: ${props=>props.theme.SubmitBtnBackColor};
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    cursor: pointer;
 `
 
 
@@ -314,7 +355,10 @@ function ChatRoom() {
     }
 
     // 채팅
-
+    const { register, handleSubmit, setValue } = useForm()
+    const onValid = (data) => {
+        setValue("chat", "")
+    }
 
     return (
        <>
@@ -427,6 +471,15 @@ function ChatRoom() {
             </ChatWrapper>
         </Chat>
 
+        {/* 채팅 입력창 */}
+        <ChatInputSection>
+            <ChatInputForm onSubmit={handleSubmit(onValid)}>
+                <ChatInputInput {...register("chat", {required : true})} placeholder="전송할 메세지를 입력해주세요"/>
+                <ChatInputBtn>
+                    전송
+                </ChatInputBtn>
+            </ChatInputForm>
+        </ChatInputSection>
        </>
     )
 }
