@@ -1,7 +1,8 @@
 import { RecoilRoot } from 'recoil';
 import Routers from './Routes';
 import { createGlobalStyle } from "styled-components";
-import { ReactQueryDevtools } from 'react-query/devtools'
+import { ReactQueryDevtools } from 'react-query/devtools';
+import ThemeCustom from './routes/ThemeCustom';
 
 const GlobalStyle = createGlobalStyle`
 @import url("//fonts.googleapis.com/earlyaccess/nanummyeongjo.css");
@@ -71,6 +72,7 @@ function App() {
       <GlobalStyle />
       <Routers/>
       <ReactQueryDevtools initialIsOpen={false} />
+      <ThemeCustom />
     </RecoilRoot>
   );
 }
