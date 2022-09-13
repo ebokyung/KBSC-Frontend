@@ -121,6 +121,11 @@ export const pinkTheme ={
     // 채팅 페이지 색상들
     bgColor : "rgba(251, 224, 217, 0.15)",
     tabTitleColor : "#F1A6A0",
+    tabInfoColor : "#A2A2A6",
+    willColor : "#F89790",
+    wantColor : "#FFC659",
+    proceedingColor : "#A2A2A6",
+    btnBlockColor : "rgba(218, 218, 218, 1)",
 
     // 채팅방 페이지 색상들
     whoColor : "#F1A6A0",
@@ -181,6 +186,11 @@ export const blueTheme ={
     // 채팅 페이지 색상들
     bgColor : "rgba(196, 209, 255, 0.15)",
     tabTitleColor : "#788FE3",
+    tabInfoColor : "#A2A2A6",
+    willColor : "#788FE3",
+    wantColor : "#98D4BF",
+    proceedingColor : "#A2A2A6",
+    btnBlockColor : "rgba(218, 218, 218, 1)",
 
     // 채팅방 페이지 색상들
     whoColor : "#788FE3",
@@ -241,6 +251,11 @@ export const yellowTheme ={
     // 채팅 페이지 색상들
     bgColor : "rgba(255, 239, 197, 0.15)",
     tabTitleColor : "#FFB21D",
+    tabInfoColor : "#A2A2A6",
+    willColor : "#FFB21D",
+    wantColor : "#98D4BF",
+    proceedingColor : "#A2A2A6",
+    btnBlockColor : "rgba(218, 218, 218, 1)",
 
     // 채팅방 페이지 색상들
     whoColor : "#FFB21D",
@@ -301,6 +316,11 @@ export const purpleTheme ={
     // 채팅 페이지 색상들
     bgColor : "rgba(224, 213, 255, 0.15)",
     tabTitleColor : "#917CCF",
+    tabInfoColor : "#A2A2A6",
+    willColor : "#917CCF",
+    wantColor : "#F89790",
+    proceedingColor : "#A2A2A6",
+    btnBlockColor : "rgba(218, 218, 218, 1)",
 
     // 채팅방 페이지 색상들
     whoColor : "#917CCF",
