@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import PageHeader from '../components/PageHeader';
 import MyChatting from '../components/chat/MyChatting';
+import IngChatting from '../components/chat/IngChatting';
 import AllChatting from '../components/chat/AllChatting';
 
 const Container = styled.body`
@@ -41,6 +42,9 @@ function Chat () {
             </Wrapper>
             <Wrapper2>
                 <MyChatting />
+            </Wrapper2>
+            <Wrapper2>
+                <IngChatting />
             </Wrapper2>
             <Wrapper2>
                 <AllChatting />
