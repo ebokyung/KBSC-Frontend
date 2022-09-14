@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { LogAPI } from '../../axios';
 
 const Container = styled.section`
     width: 100%;
@@ -99,7 +100,7 @@ const ScrollDiv = styled.div`
 // 책 왼쪽 내부
 const Item = styled.li`
     font-size: 12px;
-    padding-bottom: 20px; 
+    padding-bottom: 15px; 
     color: ${props=>props.color || props.theme.bookBoxTextColor};
     cursor: pointer;
     :hover {
@@ -168,65 +169,6 @@ const TextArea = styled.textarea`
         background-color: #D9D9D9;
     }
 `
-
-const questions = [
-    {   
-        num : 1,
-        question : "인간이 주는 싶이 착목한는 있으며, 힘차게 가진 내는 심장은 있으랴?",
-    },
-    {
-        num : 2,
-        question : "부패를 청춘의 만물은 이것은 피는 오아이스도 같이, 그들의 교향악이다.",
-    },
-    {
-        num : 3,
-        question : "풀이 피가 따뜻한 웅대한 예가 눈이 할지라도 이상의 보배를 있다.",
-    },
-    {
-        num : 4,
-        question : "꽃이 하는 얼음 이것이다.",
-    },
-    {
-        num : 5,
-        question : "거친 대중을 부패를 낙원을 들어 소담스러운 우리 수 교향악이다.",
-    },
-    {
-        num : 6,
-        question : "실로 투명하되 청춘의 놀이 이상의 따뜻한 아니더면, 꽃이 옷을 것이다.",
-    },
-    {
-        num : 7,
-        question : "남는 그들은 우리의 이상의 불어 뿐이다. 우리 황금시대의 사람은 위하여서.",
-    },
-    {
-        num : 8,
-        question : "주는 있는 그와 실현에 봄바람이다.",
-    },
-    {
-        num : 9,
-        question : "그림자는 이것은 미묘한 별과 스며들어 청춘의 뿐이다.",
-    },
-    {
-        num : 10,
-        question : "눈이 위하여 것은 되는 보라.",
-    },
-    {
-        num : 11,
-        question : "있는 같이, 설레는 없으면, 구하기 작고 약동하다.",
-    },
-    {
-        num : 12,
-        question : "속에서 고행을 열락의 목숨이 피가 기쁘며, 그리하였는가?",
-    },
-    {
-        num : 13,
-        question : "사라지지 청춘 피가 우리의 찾아다녀도, 보라. 온갖 없으면, 능히 피가 힘있다.",
-    },
-    {
-        num : 14,
-        question : "그와 못하다 끝에 가지에 설레는 바로 것이다..",
-    },
-]
 
 const answers = [
     {   
@@ -319,6 +261,9 @@ function DiaryMonthly () {
     // 수정모드 여부 및 내용
     const [updateContent, setUpdateContent] = useState("ggg");
     const [updateState, setUpdateState] = useState(false);
+
+    // API로부터 모든 질문들 받아오기
+    const [questions, setQuestions] = useState([])
     
     // 선택된 질문 번호 알아내기
     const [isClicked, setIsClicked] = useState([false, false]);
@@ -357,10 +302,17 @@ function DiaryMonthly () {
         setUpdateState(false)
     }
 
+    // API로 부터 질문내용 받아옴
+    const getDiary = async() => {
+        const data = await LogAPI.get("/api/v1/question");
+        setQuestions(data.data.data)
+    }
+
     useEffect(()=>{
         setNowPageDate(nowPageYear + '-' + ('0' + nowPageMonth).slice(-2));
         setIsClicked([false, false]);
-    },[nowPageMonth])
+        getDiary()
+    },[])
 
     // 일기내용 수정하기
     const handleSubmit = (e) => {
@@ -392,19 +344,19 @@ function DiaryMonthly () {
                         <ScrollDiv>
                             <ul>
                             {questions.map(i =>
-                                <Item key={i.num} 
+                                <Item key={i.id} 
                                     isClicked={isClicked} 
-                                    onClick={()=>handleSelect(i.num)} 
-                                    color={isClicked[i.num] ? 'black' : ''}>
+                                    onClick={()=>handleSelect(i.id)} 
+                                    color={isClicked[i.id] ? 'black' : ''}>
                                     {
-                                        isClicked[i.num] ? 
+                                        isClicked[i.id] ? 
                                         <ItemUnderLine>
-                                            <StyledSpanB>{('0' + i.num).slice(-2)}일</StyledSpanB>
-                                            <span>{i.question}</span>
+                                            <StyledSpanB>{('0' + i.id).slice(-2)}일</StyledSpanB>
+                                            <span>{i.content}</span>
                                         </ItemUnderLine> :
                                         <span>
-                                            <StyledSpanB>{('0' + i.num).slice(-2)}일</StyledSpanB>
-                                            <span>{i.question}</span>
+                                            <StyledSpanB>{('0' + i.id).slice(-2)}일</StyledSpanB>
+                                            <span>{i.content}</span>
                                         </span>
                                     }
                                 </Item>
