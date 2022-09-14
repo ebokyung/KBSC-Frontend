@@ -28,7 +28,7 @@ const InnerBox = styled.div`
     height: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 3% 2%;
+    grid-gap: 10% 4%;
     margin-top: 20px;
     align-items: space-between;
 `
@@ -48,14 +48,16 @@ const Item = styled.div`
 const ItemCategory = styled.div`
     font-family: 'Nanum Myeongjo', serif;
     color : ${props => props.theme.emotionItemColor};
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 500;
     margin-bottom: 10px;
 `
 const ItemBody = styled.p`
     font-family: 'Nanum Myeongjo', serif;
     line-height: 1.5;
     font-weight: 500;
+    padding-top: 5px;
+    padding-bottom: 20px;
     font-size: 15px;
 `
 const ItemFooter = styled.div`
@@ -110,136 +112,119 @@ const ItemBlur = styled.div`
 `
 const BlurImg = styled.img`
     width: 110px;
-    height: 60px;
+    height: 65px;
+    cursor: pointer;
 `
 
-const test = [
-    {   
-        num : 1,
-        category : 1,
-        body : "인생을 전인 석가는 얼마나 고동을 뜨고, 것이다.보라, 봄바람이다. 인간의 오아이스도 있는 싶이 노년에게서 있을 약동하다",
+const categoryArray = [
+    {
+        id : 1,
+        category : "불면증",
+        e : "INSOMNIA"
     },
     {
-        num : 2,
-        category : 2,
-        body : "피어나는 있으며, 일월과 따뜻한 않는 보라. 무엇을 생의 목숨을 열락의 우는 인도하겠다는 노래하며 그리하였는가?",
+        id : 2,
+        category : "자신감",
+        e : "CONFIDENCE"
     },
     {
-        num : 3,
-        category : 1,
-        body : "품으며, 어디 열락의 능히 있는 바이며, 것이다. 심장은 따뜻한 우리는 살았으며",
+        id : 3,
+        category : "불안감",
+        e : "FEAR"
     },
     {
-        num : 4,
-        category : 2,
-        body : "품으며, 어디 열락의 능히 있는 바이며, 것이다. 심장은 따뜻한 우리는 살았으며, 목숨이 있는 곳으로 칼이다.",
+        id : 4,
+        category : "식욕부진",
+        e : "ANOREXIA"
     },
     {
-        num : 5,
-        category : 5,
-        body : "품으며, 어디 열락의 능히 있는 바이며, 것이다. 심장은 따뜻한 우리는 살았으며, 목숨이 있는 곳으로 칼이다.",
+        id : 5,
+        category : "무력감",
+        e : "HELPLESS"
     },
     {
-        num : 8,
-        category :4,
-        body : "품으며, 어디 열락의 능히 있는 바이며, 것이다. 심장은 따뜻한 우리는 살았으며, 목숨이 있는 곳으로 칼이다.",
+        id : 6,
+        category : "반복적 회상",
+        e : "REMIND"
     },
     {
-        num : 9,
-        category :4,
-        body : "품으며, 어디 열락의 능히 있는 바이며, 것이다. 심장은 따뜻한 우리는 살았으며, 목숨이 있는 곳으로 칼이다.",
+        id : 7,
+        category : "분노",
+        e : "ANGRY"
     },
-    {
-        num : 10,
-        category : 3,
-        body : "어디 열락의 능히 있는 바이며, 것이다. 심장은 따뜻한 우리는 살았으며, 목숨이 있는 곳으로 칼이다.",
-    },
-    {
-        num : 11,
-        category : 3,
-        body : "품으며, 어디 열락의 능히 있는 바이며, 것이다. 심장은 따뜻한 우리는 살았으며, 목숨이 있는 곳으로 칼이다.",
-    },
-
 ]
 
 function MissionBox () {
-    const [data, setData] = useState(test);
-    const [categories, setCategories] = useState([])
-    //const [isClickedCategory, setIsClickedCategory] = useState(Array(categories.length).fill(true));
-    const [localCateogry, setLocalCategory] = useState([])
-    const [checkClick, setCheckClick] = useState(0)
-
-    const handleClickedCategory = ( idx ) => {
-    }
+    const [clickCategories, setClickCategories] = useState([])
+    const [getApi, setGetApi] = useState(false)
+    const [success , setSuccess] = useState([])
     
     const onClick = async(idx) => {
-        // if(categories[idx-1].isActive){
-        //     categories[idx-1].isActive = false
-        //     localCateogry[idx-1] = false
-        // }else{
-        //     categories[idx-1].isActive = true
-        //     localCateogry[idx-1] = true
-        // }
-        // handleClickedCategory(idx)
-        // localStorage.setItem("category", localCateogry)
-        // setCheckClick(prev => prev + 1)
         try{
             await LogAPI.put(`/api/v1/missions/categories/${idx}`)
-            const categories = await LogAPI.get("/api/v1/missions/categories")
-            setCategories(categories.data.data)
+            getCategory()
         }catch(e){
             console.log(e)
         }
     }
+
+    const missionSucess = async(id) => {
+        try{
+            await LogAPI.put(`/api/v1/missions/${id}/success`)
+            setGetApi(prev => !prev)
+        }catch(e){
+            console.log(e)
+        }
+    }
+
     const getCategory = async() => {
         try{
-            const categories = await LogAPI.get("/api/v1/missions/categories")
-            console.log(categories.data.data)
-            const messions = await LogAPI.get("/api/v1/missions")
-            console.log(messions)
-            setCategories(categories.data.data)
+            const categories = await LogAPI.get("/api/v1/missions")
+            const success = await LogAPI.get("/api/v1/missions/success")
+            setClickCategories(categories.data.data)
+            setSuccess(success.data.data.reverse())
+            //console.log(categories.data.data, success.data.data.reverse())
         }catch(e){
             console.log(e)
         }
     }
 
     useEffect(()=>{
-        /* if(localStorage.getItem("category") !== null){
-            const array = localStorage.getItem("category").split(',').map(i=>JSON.parse(i))
-            setLocalCategory(array);
-            categories.map(i => i.isActive = array[i.num-1])
-        }else{
-            const firstArray = [false,false,false,false,false]
-            setLocalCategory(firstArray)
-            localStorage.setItem("category", firstArray)
-        } */
         getCategory()
-    },[checkClick])
+    },[getApi])
 
     return (
         <Wrapper>
             <BtnContainer>
-                {categories.map(i => 
-                    <Btn key={i.id}
-                        isActive={i.checked}
-                        onClick={()=> onClick(i.id)}>
+                {categoryArray.map(i => 
+                    <Btn 
+                        key={i.id}
+                        isActive={false}
+                        onClick={()=> onClick(i.id)}
+                        >
                         {i.category}
                     </Btn>
                 )}
             </BtnContainer>
             <BoxContainer>
                 <InnerBox>
-                        {data.map(i => 
+                        {clickCategories.map(i => 
                             <Item
-                                key={i.num}>
-                                <ItemCategory>{i.category}</ItemCategory>
-                                <div><ItemBody>{i.body}</ItemBody></div>
-                                <ItemFooter>
+                                key={i.id}>
+                                <ItemCategory>{i.category === "INSOMNIA" ? "불면증" :
+                                                   i.category === "CONFIDENCE" ? "자신감" : 
+                                                       i.category === "FEAR" ? "불안감" :
+                                                            i.category === "ANOREXIA" ? "식욕부진" : "무력감"}</ItemCategory>
+                                <div><ItemBody>{i.content}</ItemBody></div>
+                                <ItemFooter onClick={()=>missionSucess(i.id)}>
                                     미션완료
                                 </ItemFooter>
-                                {/* <ItemBlur>
-                                    <BlurImg src={Img} />
-                                </ItemBlur> */}
+                                {i.isSuccess ? 
+                                <ItemBlur>
+                                    <BlurImg onClick={()=>missionSucess(i.id)} src={Img} />
+                                </ItemBlur> :
+                                 null
+                                }
                             </Item>)}
                     </InnerBox>
             </BoxContainer>

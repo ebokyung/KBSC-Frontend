@@ -16,7 +16,11 @@ const Title = styled.h1`
     font-size: 30px;
     font-weight: 700;
 `
-
+const Span = styled.span`
+    font-size: 30px;
+    font-weight: 700;
+    color: ${props => props.theme.SubmitBtnBackColor};
+`
 const HeadUnderLine = styled.div`
     background-color: ${props => props.theme.underLineColor};
     height: 10px;
@@ -41,7 +45,11 @@ function PageHeader({props}) {
         <Header>
             <Head>
                 <Title>
+                    {props.titlePre}
+                    <Span>{props.span1}</Span>
                     {props.title}
+                    <Span>{props.span2}</Span>
+                    {props.titleNext}
                 </Title>
                 <HeadUnderLine style={{width : props.width}} />
             </Head>
@@ -51,6 +59,9 @@ function PageHeader({props}) {
                 </BodyItem>
                 <BodyItem>
                     {props.body2}
+                </BodyItem>
+                <BodyItem>
+                    {props.body3}
                 </BodyItem>
             </Body>
         </Header>
