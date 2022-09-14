@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import { LogAPI } from '../../axios';
 
 const Container = styled.section`
     width: 100%;
@@ -49,27 +51,60 @@ const Btn = styled.button`
 `
 
 function DiaryDaily () {
-    const [answer, setAnswer] = useState("");
+    const nowDate = new Date();
+    const day = nowDate.getDate();
+    const month = nowDate.getMonth() + 1;
+    const [todayData, setTodayData] = useState(null);
+    const { register, handleSubmit } = useForm()
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const onValid = async(data) => {
+        const result = {
+            "answer" : data.diary
+        }
+        try{
+            await LogAPI.post(`/api/v1/answer/${day}`, result).then(
+                response => {
+                    console.log(response);
+                }
+            )
+        }catch(error){
+            console.log(error)
+        }
     }
-    const handleChange = (e) => {
-        setAnswer(e.target.value);
-        console.log(e.target.value);
+
+    const getData = async() => {
+        try{
+            const data = await LogAPI.get(`/api/v1/answer/${day}/${nowDate.getFullYear()}-${('0' + month).slice(-2)}`);
+            setTodayData(data.data.data[0])
+        }catch(e){
+            console.log(e)
+        }
     }
+
+    useEffect(()=>{
+        getData()
+    },[])
+
+
 
     return(
     <Container>
+        {todayData?.answer === '' ? 
+        <>
         <Question>
             <QuestionItem>
-                오늘 하루 중 가장 행복했던 순간은 언제인가요?
+                {todayData?.question}
             </QuestionItem>
         </Question>
-        <Form onSubmit={handleSubmit}>
-            <Textarea placeholder="질문에 자유롭게 답해주세요." value={answer} onChange={handleChange}/>
+        <Form onSubmit={handleSubmit(onValid)}>
+            <Textarea {...register("diary", {required : true})}  placeholder="질문에 자유롭게 답해주세요."/>
             <Btn>작성 완료</Btn>
-        </Form>
+        </Form></> : 
+        <Question>
+            <QuestionItem>
+                오늘의 대답이 등록되었습니다.
+            </QuestionItem>
+        </Question>}
     </Container>
     )
 }
