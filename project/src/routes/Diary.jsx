@@ -34,7 +34,7 @@ const pageheader__monthly = {
 
 const pageheader__daily = {
     title : "오늘의 질문",
-    body1: "오늘 하루 중 가장 행복했던 순간은 언제인가요?",
+    // body1: "오늘 하루 중 가장 행복했던 순간은 언제인가요?",
     width : "155px"
 }
 

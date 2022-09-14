@@ -1,10 +1,18 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.section`
     width: 100%;
-    margin-top: 30px;
+    /* margin-top: 30px; */
     margin-bottom: 10%;
     font-family: 'Nanum Myeongjo', serif;
+`
+const Question = styled.div`
+    margin-bottom: 30px;
+`
+const QuestionItem = styled.p`
+    /* margin-top: 10px; */
+    font-weight: 500;
 `
 
 const Form = styled.form`
@@ -41,10 +49,25 @@ const Btn = styled.button`
 `
 
 function DiaryDaily () {
+    const [answer, setAnswer] = useState("");
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    }
+    const handleChange = (e) => {
+        setAnswer(e.target.value);
+        console.log(e.target.value);
+    }
+
     return(
     <Container>
-        <Form>
-            <Textarea placeholder="질문에 자유롭게 답해주세요." />
+        <Question>
+            <QuestionItem>
+                오늘 하루 중 가장 행복했던 순간은 언제인가요?
+            </QuestionItem>
+        </Question>
+        <Form onSubmit={handleSubmit}>
+            <Textarea placeholder="질문에 자유롭게 답해주세요." value={answer} onChange={handleChange}/>
             <Btn>작성 완료</Btn>
         </Form>
     </Container>
