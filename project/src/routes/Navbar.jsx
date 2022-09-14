@@ -121,13 +121,15 @@ function NavBar () {
     const missionMatch = useMatch("/mission");
     const chatMatch = useMatch("/chat/*");
     const clinicMatch = useMatch("/clinic");
+    // 로그인 했는지 안했는지
+    const logCheck = localStorage.getItem("token") || sessionStorage.getItem("token")
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => {
         window.removeEventListener('scroll', handleScroll); //clean up
         };
-    }, []);
+    }, [logCheck]);
 
     let lastScrollY = 0;
     const handleScroll = (e) => {
@@ -144,32 +146,57 @@ function NavBar () {
     };
 
     const logOut = () => {
+        if (localStorage.getItem('token') === null){
+            sessionStorage.removeItem('token')
+        }else{
+            localStorage.removeItem('token')
+        }
+        navigate("/")
+    }
 
+    const logIn = () => {
+        navigate("/login")
     }
 
     return(
     <Container id='navbar'>
         <Wrapper>
-            <Logo>
+            <Logo onClick={() => navigate("/")}>
                 <Logoimg src={logoImg} />
                 <LogoTitle>한울</LogoTitle>
             </Logo>
-            <Menu>
-                <Item isActive={mainMatch !== null} onClick={() => navigate("/")}>서비스 소개</Item>
-                <Item isActive={emotionMatch  !== null} itemName='감정비우기'>감정 비우기
-                    <DropDown>
-                            <DropDownList isActive={emptyMatch  !== null} onClick={() => navigate("/emotion/empty")}>감정 비우기</DropDownList>
-                            <DropDownList isActive={shareMatch  !== null} onClick={() => navigate("/emotion/share")}>감정 나누기</DropDownList>
-                    </DropDown>
-                </Item>
-                <Item isActive={diaryMatch  !== null} onClick={() => navigate("/diary")}>질문 일기</Item>
-                <Item isActive={missionMatch  !== null} onClick={() => navigate("/mission")}>일일 미션</Item>
-                <Item isActive={chatMatch  !== null} onClick={() => navigate("/chat")}>친구 상담</Item>
-                <Item isActive={clinicMatch  !== null} onClick={() => navigate("/clinic")}>상담 및 치유</Item>
-            </Menu>
-            <Alarm onClick={logOut}>
-                로그아웃
-            </Alarm>
+            {
+                logCheck === null ? 
+                // 로그인 안한 상태
+                <>
+                <Menu>
+                    
+                </Menu>
+                <Alarm onClick={logIn}>
+                    로그인
+                </Alarm>
+                </>
+                :
+                // 로그인한 상태
+                <>
+                <Menu>
+                    <Item isActive={mainMatch !== null} onClick={() => navigate("/")}>서비스 소개</Item>
+                    <Item isActive={emotionMatch  !== null} itemName='감정비우기'>감정 비우기
+                        <DropDown>
+                                <DropDownList isActive={emptyMatch  !== null} onClick={() => navigate("/emotion/empty")}>감정 비우기</DropDownList>
+                                <DropDownList isActive={shareMatch  !== null} onClick={() => navigate("/emotion/share")}>감정 나누기</DropDownList>
+                        </DropDown>
+                    </Item>
+                    <Item isActive={diaryMatch  !== null} onClick={() => navigate("/diary")}>질문 일기</Item>
+                    <Item isActive={missionMatch  !== null} onClick={() => navigate("/mission")}>일일 미션</Item>
+                    <Item isActive={chatMatch  !== null} onClick={() => navigate("/chat")}>친구 상담</Item>
+                    <Item isActive={clinicMatch  !== null} onClick={() => navigate("/clinic")}>상담 및 치유</Item>
+                </Menu>
+                <Alarm onClick={logOut}>
+                    로그아웃
+                </Alarm>
+                </>
+            }
         </Wrapper>
     </Container>
     )
