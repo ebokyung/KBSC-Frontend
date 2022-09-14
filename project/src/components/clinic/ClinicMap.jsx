@@ -3,6 +3,8 @@ import React, {useEffect} from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import style from './Map.modul.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 
 const { kakao } = window;
@@ -17,10 +19,31 @@ const Container = styled.section`
 `
 
 const Input = styled.input`
-    width: 80%;
+    width: 100%;
+    border-radius: 15px;
+    border-width: thin;
+    padding: 2px 10px;
+    /* font-size: 11px; */
+    font-family: 'Nanum Myeongjo', serif;
+    ::placeholder {
+        font-size: 11px;
+        font-family: 'Nanum Myeongjo', serif;
+
+    }
     :focus {
         outline-color: ${props=>props.theme.SubmitBtnBackColor};
     }
+`
+const SearchBtn = styled.button`
+    position: absolute;
+    right: 5px;
+    width: 30px;
+    border-style: none;
+    background: none;
+    cursor: pointer;
+    color: #A2A2A6;
+    display: flex;
+    align-items: center;
 `
 
 
@@ -69,7 +92,7 @@ function ClinicMap () {
             var keyword = place
 
             if (!keyword.replace(/^\s+|\s+$/g, '')) {
-                alert('키워드를 입력해주세요!');
+                alert('지역명을 입력해주세요!');
                 return false;
             }
             // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
@@ -266,9 +289,9 @@ function ClinicMap () {
 
             <div id="menu_wrap" className={style.bg_white}>
                 <div className={style.option}>
-                    <div style={{display: 'flex', justifyContent: 'center'}}>   
+                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>   
                             <Input onChange={onChange} type="text" value={place} id="keyword" size="15" placeholder="지역명을 입력해주세요."/> 
-                            <button onClick={searchPlaces}>검색</button>
+                            <SearchBtn onClick={searchPlaces}><FontAwesomeIcon icon={faMagnifyingGlass} /></SearchBtn>
                     </div>
                 </div>
                 <hr />
