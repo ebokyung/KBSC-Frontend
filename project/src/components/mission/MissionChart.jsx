@@ -1,8 +1,11 @@
+import { useEffect } from "react";
 import ApexChart from "react-apexcharts"
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { isColor } from "../../atoms";
 import "./box.css";
+import { LogAPI } from '../../axios';
+import { useState } from "react";
  
 const Container = styled.section`
     margin-top: 20px;
@@ -12,6 +15,54 @@ const Container = styled.section`
 
 
 function MissionChart () {
+    const [success , setSuccess] = useState([])
+    const today = new Date();
+    const week = new Array('일', '월', '화', '수', '목', '금', '토');
+    const dayGet = (n) => {
+        const num = today.getDay()
+        if (num - n < 0){
+            return 6 + num - n
+        }else{
+            return num - n
+        }
+    }
+    const dateGet = (n) => {
+        const month = today.getMonth() + 1
+        const date = today.getDate()
+        if (date - n <= 0){
+            if (month === 5 || month ===  7 || month ===  8 || month ===  10 || month ===  12){
+                return 30 - (date - n)
+            }
+            else if (month === 3){
+                return 28 - (date - n)
+            }else if (month === 1 || month === 2 || month ===  4 || month ===  6 || month ===  9 || month ===  11){
+                return 31 - (date - n)
+            }
+        }else {
+            return date - n
+        }
+    }
+    
+    const weekArray = [`${dateGet(6)}일 ${week[dayGet(6)]}요일`,`${dateGet(5)}일 ${week[dayGet(5)]}요일`,`${dateGet(4)}일 ${week[dayGet(4)]}요일`,`${dateGet(3)}일 ${week[dayGet(3)]}요일`,`${dateGet(2)}일 ${week[dayGet(2)]}요일`,`${dateGet(1)}일 ${week[dayGet(1)]}요일`,`${dateGet(0)}일 ${week[dayGet(0)]}요일`]
+
+    const getSuccess = async() => {
+        try{
+            const success = await LogAPI.get("/api/v1/missions/success")
+            const data = success.data.data
+            const dataArray = [0,0,0,0,0,0,0]
+            for (var i = data.length; i < dataArray.length; i++) {
+                dataArray[i + 1] = success.data.data.reverse()[i-data.length]
+            }
+            setSuccess(dataArray)
+        }catch(e){
+            console.log(e)
+        }
+    }
+    useEffect(()=>{
+        getSuccess();
+    },[])
+    console.log(success)
+
     const theme = useRecoilValue(isColor);
     const whatColor = () => {
         if (theme === 1){
@@ -33,7 +84,7 @@ function MissionChart () {
         series={[
             {
                 name: "",
-                data: [50,75,25,100,50,0,33]   // map함수는 기본적으로 return값으로 array를 줌
+                data: success  // map함수는 기본적으로 return값으로 array를 줌
             },
         ]}
         height = {`350px`}
@@ -95,7 +146,7 @@ function MissionChart () {
                     show: false,
                 },
                 type : "date",
-                categories: ["15일 월요일", "16일 화요일", "17일 수요일", "18일 목요일", "19일 금요일", "20일 토요일", "21 월요일"]
+                categories: weekArray
             },
             tooltip: {              // 마우스를 갔다대면 나오는 정보창
                 y: {
