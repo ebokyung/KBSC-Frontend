@@ -44,12 +44,11 @@ const TabCategories = styled.span`
 const TabCategoryLabel = styled.label`
     padding-right: 5px;
     cursor: pointer;
-    /* color: ${props => props.theme.proceedingColor}; */
 `
 const TabCategoryInput = styled.input`
     display: none;
     &:checked + ${TabCategoryLabel} {
-        color: ${props => props.theme.willColor};
+        color: ${props => (props.value === 'want' ? props.theme.wantColor : props.theme.willColor)};
     }
 `
 const Span = styled.span`
@@ -62,7 +61,7 @@ const Wrap = styled.div`
     padding: 40px 7%;
     width: 100%;
     min-height: 200px;
-    
+
 `
 const ChatDiv = styled.div`
     width: 100%;
