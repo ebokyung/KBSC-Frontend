@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle as regularCircle } from '@fortawesome/free-regular-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.section`
     width: 100%;
@@ -117,8 +118,8 @@ const testIng = [
     {
         id: 1,
         state: 0,
-        title: "사소한 것도 칭찬하는 방! 칭찬이 필요한 모든 분들 환영합니다.",
-        nickname: "내닉네임",
+        title: "왠지 모르게 울적한 새벽. 혼자 뒤척이지 말고 함께 이야기 나눠요.",
+        nickname: "영서",
         recommand: 24,
         category: 'will',
     },
@@ -126,7 +127,7 @@ const testIng = [
         id: 2,
         state: 0,
         title: "답답한 마음을 모두 털어 놓아요. 하나 하나 진심으로 듣고 조언해드릴게요!",
-        nickname: "내닉네임",
+        nickname: "상담가",
         recommand: 33,
         category: 'will',
     },
@@ -134,7 +135,7 @@ const testIng = [
         id: 3,
         state: 0,
         title: "저만 아는 고민이 있어요. 들어주실래요?",
-        nickname: "내닉네임",
+        nickname: "몽글몽글",
         recommand: 2,
         category: 'want',
     },
@@ -142,7 +143,7 @@ const testIng = [
         id: 4,
         state: 0,
         title: "하고 싶은 말 다 할 수 있는 방. 자유롭게 들어오세요.",
-        nickname: "내닉네임",
+        nickname: "석환",
         recommand: 24,
         category: 'will',
     },
@@ -151,6 +152,7 @@ const testIng = [
 const testBin = []
 
 function IngChatting () {
+    const nav = useNavigate()
 
     return (
         <Container>
@@ -176,7 +178,7 @@ function IngChatting () {
                                 <Span>|</Span>
                                 <ChatFooterInfoSpan>{i.recommand}명 추천</ChatFooterInfoSpan>
                             </ChatFooterInfoDiv>
-                            <ChatBtn category={i.category}>소통방 가기</ChatBtn>
+                            <ChatBtn onClick={()=>nav("/chat/room/1")} category={i.category}>소통방 가기</ChatBtn>
                         </ChatFooterDiv>
                     </ChatDiv>
                 )

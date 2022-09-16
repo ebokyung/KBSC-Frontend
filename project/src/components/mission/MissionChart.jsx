@@ -15,7 +15,7 @@ const Container = styled.section`
 
 
 function MissionChart () {
-    const [success , setSuccess] = useState([])
+    const [a, setSuccess] = useState([0,0,0,0,0,0,0])
     const today = new Date();
     const week = new Array('일', '월', '화', '수', '목', '금', '토');
     const dayGet = (n) => {
@@ -47,21 +47,35 @@ function MissionChart () {
 
     const getSuccess = async() => {
         try{
-            const success = await LogAPI.get("/api/v1/missions/success")
-            const data = success.data.data
-            const dataArray = [0,0,0,0,0,0,0]
-            for (var i = data.length; i < dataArray.length; i++) {
-                dataArray[i + 1] = success.data.data.reverse()[i-data.length]
-            }
-            setSuccess(dataArray)
+            const weekData = await LogAPI.get("/api/v1/missions/success-count")
+            setSuccess(weekData.data.data.reverse())
         }catch(e){
             console.log(e)
         }
     }
+
+    const please = (a) => {
+        const len = a.length
+        const result = []
+        a.forEach( x => {
+            result.push(((x / 7) * 100).toFixed(2))
+          });
+        if(len < 7){
+            let nums = new Array(7-len);
+            for (let i = 0; i < 7-len ; ++i) {
+                nums[i] = 0;
+            }
+            const real = [...nums, ...result]
+            return real
+            
+        }else{
+            return result
+        }
+    }
+
     useEffect(()=>{
         getSuccess();
     },[])
-    console.log(success)
 
     const theme = useRecoilValue(isColor);
     const whatColor = () => {
@@ -84,7 +98,7 @@ function MissionChart () {
         series={[
             {
                 name: "",
-                data: success  // map함수는 기본적으로 return값으로 array를 줌
+                data: please(a)
             },
         ]}
         height = {`350px`}
@@ -165,20 +179,6 @@ function MissionChart () {
                 x: {
                     show: false
                 },
-                // custom: function (series) { 
-                //     return (
-                //         '<div class="custom_box">' +
-                //         '<span class="custom_box_title">' +
-                //         series.series[0][series.dataPointIndex] + "% " + "완료!" +
-                //         "</span>" +
-                //         '<span class="custom_box_body">' +
-                //         '완벽해요!' +
-                //         "</span>" +
-                //         "</div>"
-                //       );
-                // },
-
-                
             },
             stroke: {               // line 스타일 설정
                 curve: "smooth",    // line을 부드럽게 만들어줌

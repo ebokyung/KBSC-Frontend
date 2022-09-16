@@ -79,7 +79,7 @@ function App() {
       }>
         <GlobalStyle />
         <Routers/>
-        <ReactQueryDevtools initialIsOpen={false} />
+{/*         <ReactQueryDevtools initialIsOpen={false} /> */}
       </ThemeProvider>
   );
 }

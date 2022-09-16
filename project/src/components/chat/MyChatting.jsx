@@ -268,7 +268,7 @@ function MyChatting () {
                     </ChatTitle>
                     <ChatFooterDiv>
                         <ChatFooterInfoDiv style={{opacity: '0.5'}}>
-                            <ChatFooterInfoSpan>내닉네임</ChatFooterInfoSpan>
+                            <ChatFooterInfoSpan>한울</ChatFooterInfoSpan>
                             <Span>|</Span>
                             <ChatFooterInfoSpan>0명 추천</ChatFooterInfoSpan>
                         </ChatFooterInfoDiv>
