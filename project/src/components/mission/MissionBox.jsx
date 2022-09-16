@@ -116,48 +116,11 @@ const BlurImg = styled.img`
     cursor: pointer;
 `
 
-const categoryArray = [
-    {
-        id : 1,
-        category : "불면증",
-        e : "INSOMNIA"
-    },
-    {
-        id : 2,
-        category : "자신감",
-        e : "CONFIDENCE"
-    },
-    {
-        id : 3,
-        category : "불안감",
-        e : "FEAR"
-    },
-    {
-        id : 4,
-        category : "식욕부진",
-        e : "ANOREXIA"
-    },
-    {
-        id : 5,
-        category : "무력감",
-        e : "HELPLESS"
-    },
-    {
-        id : 6,
-        category : "반복적 회상",
-        e : "REMIND"
-    },
-    {
-        id : 7,
-        category : "분노",
-        e : "ANGRY"
-    },
-]
-
 function MissionBox () {
     const [clickCategories, setClickCategories] = useState([])
     const [getApi, setGetApi] = useState(false)
-    const [success , setSuccess] = useState([])
+    const [categoryArray, setCategoryArray] = useState([])
+    
     
     const onClick = async(idx) => {
         try{
@@ -180,17 +143,26 @@ function MissionBox () {
     const getCategory = async() => {
         try{
             const categories = await LogAPI.get("/api/v1/missions")
-            const success = await LogAPI.get("/api/v1/missions/success")
+            const cate = await LogAPI.get("/api/v1/missions/categories")
             setClickCategories(categories.data.data)
-            setSuccess(success.data.data.reverse())
-            //console.log(categories.data.data, success.data.data.reverse())
+            setCategoryArray(cate.data.data)
+            console.log(cate.data.data, categories.data.data)
         }catch(e){
             console.log(e)
         }
     }
 
+    const checkCategories = (clickCategories) => {
+        const result = []
+        clickCategories.forEach( x => {
+            result.push(x.category)
+        });
+        console.log(result)
+    }
+
     useEffect(()=>{
         getCategory()
+        checkCategories(clickCategories)
     },[getApi])
 
     return (
@@ -199,7 +171,7 @@ function MissionBox () {
                 {categoryArray.map(i => 
                     <Btn 
                         key={i.id}
-                        isActive={false}
+                        isActive={i.checked}
                         onClick={()=> onClick(i.id)}
                         >
                         {i.category}
@@ -208,7 +180,7 @@ function MissionBox () {
             </BtnContainer>
             <BoxContainer>
                 <InnerBox>
-                        {clickCategories.map(i => 
+                        {clickCategories?.map(i => 
                             <Item
                                 key={i.id}>
                                 <ItemCategory>{i.category === "INSOMNIA" ? "불면증" :

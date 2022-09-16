@@ -52,6 +52,7 @@ const Btn = styled.button`
 
 function DiaryDaily () {
     const nowDate = new Date();
+    const [reset, SetReset] = useState(false);
     const day = nowDate.getDate();
     const month = nowDate.getMonth() + 1;
     const [todayData, setTodayData] = useState(null);
@@ -83,7 +84,7 @@ function DiaryDaily () {
 
     useEffect(()=>{
         getData()
-    },[])
+    },[reset])
 
 
 
@@ -98,7 +99,7 @@ function DiaryDaily () {
         </Question>
         <Form onSubmit={handleSubmit(onValid)}>
             <Textarea {...register("diary", {required : true})}  placeholder="질문에 자유롭게 답해주세요."/>
-            <Btn>작성 완료</Btn>
+            <Btn onClick={() => SetReset()}>작성 완료</Btn>
         </Form></> : 
         <Question>
             <QuestionItem>
