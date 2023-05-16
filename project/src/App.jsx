@@ -1,9 +1,12 @@
-import { RecoilRoot } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import Routers from './Routes';
-import { createGlobalStyle } from "styled-components";
-import { ReactQueryDevtools } from 'react-query/devtools'
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { ThemeProvider, createGlobalStyle } from "styled-components";
+import { mainTheme, pinkTheme, blueTheme, yellowTheme, purpleTheme } from './theme';
+import { isColor } from './atoms';
 
 const GlobalStyle = createGlobalStyle`
+@import url("//fonts.googleapis.com/earlyaccess/nanummyeongjo.css");
  html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -65,12 +68,19 @@ a{
 `
 
 function App() {
+  const theme = useRecoilValue(isColor);
+
   return (
-    <RecoilRoot>
-      <GlobalStyle />
-      <Routers/>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </RecoilRoot>
+      <ThemeProvider theme={
+        theme === 1 ? pinkTheme :
+          theme === 2 ? yellowTheme : 
+            theme === 3 ? mainTheme : 
+              theme === 4 ? blueTheme : purpleTheme
+      }>
+        <GlobalStyle />
+        <Routers/>
+{/*         <ReactQueryDevtools initialIsOpen={false} /> */}
+      </ThemeProvider>
   );
 }
 
