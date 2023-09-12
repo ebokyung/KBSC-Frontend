@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/KBSC-Frontend/static/css/main.af9db1b5.css",
-    "main.js": "/KBSC-Frontend/static/js/main.d3246f08.js",
-    "static/media/gserviceInfo_Img.jpeg": "/KBSC-Frontend/static/media/gserviceInfo_Img.bd2d2dffd1656e76823e.jpeg",
-    "static/media/loginimg.png": "/KBSC-Frontend/static/media/loginimg.b7383d0a9741e2bacb90.png",
-    "static/media/signupimg.png": "/KBSC-Frontend/static/media/signupimg.280b5b33301dd00cbae6.png",
-    "static/media/fence.png": "/KBSC-Frontend/static/media/fence.84946bcdd5fe44e7ac47.png",
-    "static/media/rfence.png": "/KBSC-Frontend/static/media/rfence.9b0bd4adcb768e7a50a2.png",
-    "static/media/bfence.png": "/KBSC-Frontend/static/media/bfence.74dd034d6a5cddd289b1.png",
-    "static/media/pfence.png": "/KBSC-Frontend/static/media/pfence.863e35a1498dbc920da3.png",
-    "static/media/yfence.png": "/KBSC-Frontend/static/media/yfence.1f1c7c9e21b779da9a9d.png",
-    "static/media/blur.png": "/KBSC-Frontend/static/media/blur.d93bde1c8e0afcdcd3c1.png",
-    "index.html": "/KBSC-Frontend/index.html",
-    "main.af9db1b5.css.map": "/KBSC-Frontend/static/css/main.af9db1b5.css.map",
-    "main.d3246f08.js.map": "/KBSC-Frontend/static/js/main.d3246f08.js.map"
+    "main.css": "/KBSC-Frontend/project/static/css/main.af9db1b5.css",
+    "main.js": "/KBSC-Frontend/project/static/js/main.c9b4e875.js",
+    "static/media/gserviceInfo_Img.jpeg": "/KBSC-Frontend/project/static/media/gserviceInfo_Img.bd2d2dffd1656e76823e.jpeg",
+    "static/media/loginimg.png": "/KBSC-Frontend/project/static/media/loginimg.b7383d0a9741e2bacb90.png",
+    "static/media/signupimg.png": "/KBSC-Frontend/project/static/media/signupimg.280b5b33301dd00cbae6.png",
+    "static/media/fence.png": "/KBSC-Frontend/project/static/media/fence.84946bcdd5fe44e7ac47.png",
+    "static/media/rfence.png": "/KBSC-Frontend/project/static/media/rfence.9b0bd4adcb768e7a50a2.png",
+    "static/media/bfence.png": "/KBSC-Frontend/project/static/media/bfence.74dd034d6a5cddd289b1.png",
+    "static/media/pfence.png": "/KBSC-Frontend/project/static/media/pfence.863e35a1498dbc920da3.png",
+    "static/media/yfence.png": "/KBSC-Frontend/project/static/media/yfence.1f1c7c9e21b779da9a9d.png",
+    "static/media/blur.png": "/KBSC-Frontend/project/static/media/blur.d93bde1c8e0afcdcd3c1.png",
+    "index.html": "/KBSC-Frontend/project/index.html",
+    "main.af9db1b5.css.map": "/KBSC-Frontend/project/static/css/main.af9db1b5.css.map",
+    "main.c9b4e875.js.map": "/KBSC-Frontend/project/static/js/main.c9b4e875.js.map"
   },
   "entrypoints": [
     "static/css/main.af9db1b5.css",
-    "static/js/main.d3246f08.js"
+    "static/js/main.c9b4e875.js"
   ]
 }
