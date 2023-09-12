@@ -162,20 +162,22 @@ function LogBox () {
             "username": data.id,
             "password": data.pw,
         };
-        try{
-            await API.post('/api/v1/user/login', result).then(
-                response => {
-                    if(autolog){
-                        localStorage.setItem("token", response.data);
-                    }else{
-                        sessionStorage.setItem("token", response.data)
-                    }
-                }
-            )
-            navigate("/")
-        } catch(error){
-            alert(error.response.data.message)
-        }
+        localStorage.setItem('token', result.username);
+        navigate('/')
+        // try{
+        //     await API.post('/api/v1/user/login', result).then(
+        //         response => {
+        //             if(autolog){
+        //                 localStorage.setItem("token", response.data);
+        //             }else{
+        //                 sessionStorage.setItem("token", response.data)
+        //             }
+        //         }
+        //     )
+        //     navigate("/")
+        // } catch(error){
+        //     alert(error.response.data.message)
+        // }
     }
 
     return(
